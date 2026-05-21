@@ -1,44 +1,107 @@
 ---
 title: Getting Started
-description: Install Envoy and join a team
+description: From installation to joining a team in minutes
 ---
 
 ## System Requirements
 
-- **macOS**: 12+ (Apple Silicon / Intel)
-- **Windows**: 10+ (x64)
+Before installing Envoy, make sure your system meets these minimum requirements:
+
+| Item | Minimum | Recommended |
+|------|---------|-------------|
+| **macOS** | 12 Monterey+ | Apple Silicon (M1+) |
+| **Windows** | 10 (x64) | Windows 11 |
+| **Network** | Access to Manager server | LAN or public internet |
+
+> Envoy is a desktop client application that requires a **Manager server** to function. If you're the team admin, please set up the Manager server first by following the [Deployment Guide](/en/deployment).
 
 ## Installation
 
-1. Visit the [download page](/download) to get the latest installer
-2. macOS users: Open the `.dmg` file and drag Envoy to Applications
-3. Windows users: Run the `.msi` installer and follow the prompts
+### Download the Installer
+
+1. Visit the [download page](/en/download) to get the latest version
+2. Choose the installer for your operating system:
+   - **macOS**: `.dmg` disk image
+   - **Windows**: `.msi` installer
+
+### macOS Installation
+
+1. Double-click the downloaded `.dmg` file
+2. Drag the **Envoy** icon to the **Applications** folder
+3. On first launch, if you see a "cannot verify developer" warning:
+   - Open **System Settings → Privacy & Security**
+   - Click **Open Anyway**
+   - Or run in Terminal: `xattr -cr /Applications/Envoy.app`
+
+### Windows Installation
+
+1. Double-click the `.msi` installer
+2. Follow the installation wizard
+3. If blocked by SmartScreen, click **More info → Run anyway**
 
 ## First Launch
 
-After launching Envoy, you'll see the login screen. You need to enter the Manager server address to connect to your team.
+After launching Envoy, you'll see the server connection screen. This is the first step — connecting to your team's Manager server.
 
-### Connecting to Manager
+### Connecting to the Manager Server
 
-1. Enter the Manager server address (e.g., `http://192.168.1.100:3000`)
-2. Click Connect
-3. If the server is available, you'll proceed to the login screen
+The Manager server is the central hub for team collaboration, handling message routing, task management, and data storage.
+
+1. Enter the Manager server address, for example:
+   - LAN: `http://192.168.1.100:3000`
+   - Local: `http://localhost:3000`
+   - Internet: `https://envoy.example.com`
+2. Click **Connect**
+3. If successful, you'll proceed to the login screen
+4. If connection fails, check:
+   - Is the server address correct?
+   - Is the Manager server running?
+   - Is the network accessible (firewall rules)?
 
 ### Login or Register
 
-- If a team already exists, enter your username and password to log in
-- If this is a new team, choose to create a new team
+After connecting to the Manager server:
 
-## Joining a Team
+- **Existing team**: Enter your username and password, then click Login
+- **New team**: Click **Create New Team**, set the team name, admin username, and password
 
-After logging in, you'll enter the team workspace. The left sidebar shows:
+> After creating a new team, you'll automatically become the **Leader** (admin) and can invite other members.
 
-- **Member list** — All team members
-- **Channels** — Team channels and private conversations
-- **Task Center** — View and manage tasks
+## Workspace Overview
+
+After logging in, you'll enter the Envoy workspace. The interface consists of:
+
+### Left Sidebar
+
+The left sidebar is the navigation center:
+
+- **Member List** — Shows all online and offline team members. Click a member avatar to start a private chat. Online members show a green dot indicator
+- **Channels** — Team discussion channels and conversation list. Channels are marked with `#`, private chats with member avatars
+- **Task Center** — View and manage all tasks. The icon shows a badge with the count of pending tasks
+
+### Main Content Area
+
+The main area shows different content based on your current action:
+
+- **Chat Window** — Message stream and input box for private chats or channels
+- **Task Panel** — View task details, upload resources, check execution logs
+- **Settings Panel** — Personal settings, AI configuration, keyboard shortcuts
+
+### Roles
+
+Envoy has two roles with different capabilities:
+
+| Role | Responsibilities | Key Actions |
+|------|-----------------|-------------|
+| **Leader** | Team manager | Create tasks, dispatch tasks, review results, manage team settings |
+| **Member** | Team member | Receive tasks, execute tasks, upload resources, submit results |
+
+The first user to create a team automatically becomes the Leader. Subsequent users join as Members.
 
 ## Next Steps
 
-- [Chat](/en/chat) — Learn how to send messages and use channels
-- [Tasks](/en/tasks) — Learn about task creation and dispatch
-- [AI Features](/en/ai) — Explore AI-powered features
+You're all set! Here's what to explore next:
+
+- [Chat](/en/chat) — Learn about messaging, channels, and file sharing
+- [Task Management](/en/tasks) — Understand the full task lifecycle from creation to review
+- [AI Features](/en/ai) — Explore AI suggestions, auto-reply, and Agent execution

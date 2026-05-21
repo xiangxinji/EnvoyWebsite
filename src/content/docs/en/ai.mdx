@@ -1,71 +1,165 @@
 ---
 title: AI Features
-description: AI suggestions, auto-reply, and Agent execution
+description: AI chat suggestions, auto-reply, task dispatch, and Agent execution
 ---
 
-## AI Overview
+## Overview
 
-Envoy integrates multiple AI features to help teams collaborate more efficiently. AI features require configuring an AI provider on the Manager server.
+Envoy deeply integrates AI capabilities across three major scenarios: chat, task management, and automated execution. AI features require configuration on the Manager server.
+
+> AI features are optional. All core Envoy features (chat, tasks, file sharing) work without AI configuration.
+
+## Prerequisites
+
+Configure AI features in the Manager Web admin interface:
+
+1. Open Manager Web (default: `http://localhost:5174`)
+2. Navigate to **Settings → AI Configuration**
+3. Fill in the following:
+
+| Setting | Description | Example |
+|---------|-------------|---------|
+| AI Provider | Service provider | OpenAI, DeepSeek, etc. |
+| API Endpoint | Interface URL | `https://api.openai.com/v1` |
+| API Key | Your secret key | `sk-...` |
+| Model | Model name | `gpt-4o`, `deepseek-chat` |
+
+After configuration, the Envoy client automatically detects AI availability and shows AI-related buttons in the chat and task interfaces.
 
 ## Chat Suggestions
 
-Click the lightning button next to the chat input box, and AI will generate a reply suggestion based on recent conversation content.
+AI chat suggestions help you quickly generate replies in conversations. AI analyzes recent chat context and generates a suggested response.
 
-- Suggestions are generated from the last N messages (N is configurable)
-- You can accept, modify, or ignore suggestions
-- Suggestions stream in real-time via SSE
+### How to Use
 
-## Auto-Reply
-
-When auto-reply is enabled, AI automatically generates and sends a reply after receiving a message.
+1. Click the **⚡ lightning button** next to the chat input box
+2. AI begins analyzing recent conversation content
+3. The suggestion text streams in (character by character) below the input box
+4. Once generated, you can:
+   - **Accept** — Fill the suggestion into the input box and press Enter to send
+   - **Edit** — Modify the suggestion before sending
+   - **Ignore** — Clear it and type your own response
 
 ### Configuration
 
-- Enable/disable in settings
-- Set a keyboard shortcut for quick toggle
-- Independent 5-second debounce per conversation
-- Channel messages do not trigger auto-reply
+Adjust chat suggestion behavior in personal settings:
 
-## AI Task Dispatch
+| Setting | Default | Description |
+|---------|---------|-------------|
+| Context messages | 5 | AI references the last N messages to generate suggestions |
 
-In the task dispatch panel, AI can assist with:
+More messages = better context understanding, but also more token consumption.
 
-- **Task Generation** — Enter a description, AI generates a task plan
-- **Smart Dispatch** — AI assigns tasks based on member capabilities
+## Auto-Reply
+
+When enabled, AI automatically generates and sends a reply after receiving a message. Useful for auto-responding when busy.
+
+### Enabling Auto-Reply
+
+Two ways to toggle auto-reply:
+
+1. **Settings Panel** — Toggle **AI Auto-Reply** in personal settings
+2. **Keyboard Shortcut** — Configure a shortcut key for quick toggling
+
+### How It Works
+
+- Each conversation maintains an independent **5-second debounce timer**
+- After receiving a message, AI waits 5 seconds for new messages before generating a reply
+- The reply is sent automatically and marked as AI-generated
+- **Channel messages do not trigger auto-reply** to avoid noise in public channels
+
+> Auto-reply messages are tagged with `ai-auto` source, so team members can see they were AI-generated.
+
+## AI Task Management
+
+AI provides two core capabilities for task management: task generation and smart dispatch.
+
+### Task Generation
+
+Leaders can use AI to generate structured task plans from natural language descriptions:
+
+1. Enter a task description (e.g., "Redesign the homepage UI including color scheme and component layout")
+2. AI analyzes the description and generates a task plan with:
+   - Task objective breakdown
+   - Suggested execution steps
+   - Expected deliverables
+3. The Leader reviews and confirms to create the task
+
+### Smart Dispatch
+
+AI can recommend the best task executor based on team member capabilities and current workload:
+
+1. Enter the task description and optional skill requirements
+2. AI analyzes the team member list and historical performance
+3. Recommends the best executor with reasoning
+4. Confirm to auto-dispatch
 
 ## Agent Execution
 
-Agent is Envoy's advanced AI feature that can automatically execute tasks.
+Agent is Envoy's most powerful AI feature — it can automatically execute tasks. The Agent uses a ReAct (Reasoning + Acting) loop to complete complex tasks step by step.
 
 ### Work Modes
 
-- **Auto Mode** — Agent starts executing immediately upon receiving a task
-- **Manual Mode** — Manual confirmation required before Agent starts
+| Mode | Behavior | Best For |
+|------|----------|----------|
+| **Auto** | Agent starts executing immediately upon receiving a task | Repetitive tasks, clear execution steps |
+| **Manual** | Agent waits for confirmation before starting | Important tasks, needs human approval |
 
-### Agent Tools
+Switch execution mode in personal settings.
 
-Agents can use the following tools to complete tasks:
+### Agent Toolset
 
-- `shell` — Execute command-line commands
-- `file_read` / `file_write` — Read and write local files
-- `upload_resource` — Upload task resources
-- `cloud_list` / `cloud_upload` — Manage cloud resources
-- `read_skill` — Read skill files
+Agents have access to these tools:
+
+| Tool | Function | Environment |
+|------|----------|-------------|
+| `shell` | Execute terminal commands | Requires Tauri desktop |
+| `file_read` | Read local file contents | Tauri |
+| `file_write` | Create or write local files | Tauri |
+| `upload_resource` | Upload files as task resources | Tauri |
+| `cloud_list` | List team cloud resource directory | Any |
+| `cloud_upload` | Upload files to team cloud resources | Any |
+| `read_skill` | Read skill knowledge base files | Tauri |
+| `query_resources` | Query existing task resources | Any |
+| `read_resource` | Read task resource file contents | Any |
+| `done` | Declare task complete | Any |
 
 ### Execution Flow
 
-1. Receive task, check execution mode
-2. Load skill catalog
-3. Enter ReAct loop (max 20 steps)
-4. Each step: Reason → Select tool → Execute → Observe result
-5. Task completed or step limit reached
-6. Report execution results
+The Agent's execution process is fully transparent. You can view the complete execution log in the task details:
 
-## Configuration Requirements
+1. **Receive task** — Check execution mode; manual mode waits for confirmation
+2. **Load skills** — Load skill knowledge base from `~/.envoy/brains/{username}/skills/`
+3. **Enter ReAct loop** (max 20 steps):
+   - **Reason** — AI analyzes the current state and decides the next action
+   - **Tool call** — Selects an appropriate tool with parameters
+   - **Observe** — Gets the tool execution result
+   - **Loop** — Continues reasoning based on results until task is complete
+4. **Report results** — Submit execution summary and resources after completion or reaching step limit
 
-AI features require Manager server configuration:
+### Working Directory
 
-- AI provider (OpenAI-compatible interface)
-- Model selection
-- API Key
-- Custom endpoint (optional)
+The Agent performs file operations in a designated working directory:
+
+- Default path: `~/.envoy/workspace/{username}/`
+- Customize in personal settings
+
+> Agent commands and file operations run within the working directory. Ensure sufficient disk space.
+
+### Timeouts
+
+- Single tool execution timeout: **60 seconds**
+- Single reasoning step timeout: **120 seconds**
+- Output truncation: stdout over 2000 characters, stderr over 1000 characters
+
+## Configuration Summary
+
+The following settings relate to AI features and can be configured in personal settings:
+
+| Setting | Type | Default | Description |
+|---------|------|---------|-------------|
+| AI Auto-Reply | Toggle | Off | Automatically reply to received messages |
+| Context Messages | Number | 5 | Number of recent messages AI references |
+| Task Execution Mode | Option | auto | Agent auto/manual execution |
+| Working Directory | Path | Default | Agent file operation directory |
+| Auto-Reply Shortcut | Shortcut | None | Quick toggle for auto-reply |

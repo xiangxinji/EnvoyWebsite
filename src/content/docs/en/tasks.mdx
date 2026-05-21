@@ -1,61 +1,145 @@
 ---
 title: Task Management
-description: Create tasks, manage lifecycle, and dispatch
+description: Complete task lifecycle from creation through dispatch, execution, and review
 ---
 
-## Task Overview
+## Overview
 
-Envoy's task system supports a complete lifecycle: Create → Dispatch → Execute → Review → Complete.
+Envoy's task system supports a complete lifecycle from creation to completion. Tasks flow between Leaders and Members, with AI assistance and Agent auto-execution for efficient team collaboration.
+
+### Task Lifecycle
+
+```
+Create → Dispatch → Execute → Submit → Review → Complete
+                                        ↘ Reject → Re-execute
+```
 
 ## Creating Tasks
 
-1. Open the Task Center (left sidebar)
-2. Click the new task button
-3. Fill in the task description and assign an executor
-4. Click Create
+### Manual Creation
+
+Leaders can create new tasks from the Task Center:
+
+1. Click the **Task Center** icon in the left sidebar
+2. Click the **New Task** button in the top right
+3. Fill in task details:
+   - **Description** — Clearly describe the task goal and requirements
+   - **Assignee** — Select a team member
+   - **Deadline** — Optional, set a due date
+4. Click **Create**
+
+The task is automatically sent to the assigned member with a notification.
 
 ### AI-Assisted Creation
 
-With AI enabled, you can enter a task description and let AI automatically generate a task plan and dispatch suggestions.
+With AI enabled, Leaders can use AI to help create tasks:
+
+1. Enter a natural language task description in the task creation panel
+2. AI analyzes the description and generates a structured task plan
+3. AI can recommend the best assignee based on team member capabilities
+4. Confirm to create the task in one click
+
+> AI-assisted creation requires an AI provider configured on the Manager server. See [AI Features](/en/ai).
 
 ## Task Status
 
-| Status | Description |
-|--------|-------------|
-| Pending | Task created, waiting for executor to start |
-| Running | Executor is working on the task |
-| Reviewing | Task completed, waiting for Leader review |
-| Completed | Review passed, task closed |
-| Failed | Task execution failed |
+Tasks progress through these states during their lifecycle:
+
+| Status | Color | Description |
+|--------|-------|-------------|
+| **Pending** | Gray dot | Task created and dispatched, waiting for executor to start |
+| **Running** | Blue dot | Executor is working on the task |
+| **Reviewing** | Yellow dot | Executor submitted results, waiting for Leader review |
+| **Completed** | Green dot | Review passed, task closed |
+| **Failed** | Red dot | An error occurred during execution |
+
+### Status Transition Rules
+
+- **Pending → Running**: Executor clicks "Start"
+- **Running → Reviewing**: Executor clicks "Submit Results"
+- **Reviewing → Completed**: Leader approves
+- **Reviewing → Running**: Leader rejects, executor must rework
+- **Any → Failed**: Unrecoverable error during execution
 
 ## Task Dispatch
 
-### Leader Dispatch
+### Manual Dispatch
 
-Leaders can assign tasks to team members:
+The Leader assigns an executor when creating a task. The task is automatically sent upon creation.
 
-1. Select a member in the task panel
-2. Fill in task content and requirements
-3. Send the task
+Dispatch tips:
+- Assign tasks based on members' areas of expertise
+- Avoid assigning too many tasks to one member simultaneously
+- Write clear task descriptions with acceptance criteria
 
-### AI Dispatch
+### AI Smart Dispatch
 
-With AI dispatch enabled, the system automatically assigns tasks based on task descriptions and team member capabilities.
+With AI dispatch enabled, the system automatically assigns tasks based on descriptions and member capabilities:
+
+1. Enter a task description in the dispatch panel
+2. Click **AI Dispatch**
+3. AI analyzes requirements and recommends the best executor
+4. Confirm to auto-dispatch
 
 ## Task Resources
 
-Executors can upload files as deliverables in tasks:
+Task resources are deliverables uploaded by the executor during the task. Leaders can review them during the review phase.
 
-- Code files
-- Documents
-- Screenshots
-- Any file type
+### Uploading Resources
+
+Executors can upload files as task resources from the task detail panel:
+
+- Click the **Upload File** button and select local files
+- All file types are supported (code, documents, screenshots, archives, etc.)
+- Files are associated with the current task after upload
+- Leaders can download and review them directly
+
+### Agent Auto-Upload
+
+When a task is executed by an Agent, it automatically uploads generated files as resources during execution.
 
 ## Task Review
 
-When a Leader receives submitted results, they can:
+When the executor submits results, the task enters the **Reviewing** state. The Leader must review it.
 
-- View execution process logs
-- View uploaded resource files
-- Approve or reject task results
-- Use AI-assisted review
+### Review Content
+
+Leaders can view the following in the task detail panel:
+
+- **Execution Log** — Complete process record including reasoning and tool calls for each step
+- **Resource Files** — List of deliverables uploaded by the executor, with preview and download
+- **Final Result** — Task summary submitted by the executor or Agent
+
+### Review Actions
+
+- **Approve** — Mark the task as completed. The executor receives a notification
+- **Reject** — Return the task to running state. The executor must rework based on feedback
+
+### AI-Assisted Review
+
+Leaders can use AI to help review task results:
+
+1. Click **AI Review** in the task review panel
+2. AI analyzes the task description, execution process, and submitted resources
+3. AI provides a review opinion with pass/fail recommendation
+4. The Leader makes the final decision based on AI input
+
+## Task Center
+
+The Task Center is a centralized view for all tasks, accessible from the left sidebar.
+
+### Filtering and Sorting
+
+- **Filter by status** — View only tasks in a specific state (pending, running, reviewing, etc.)
+- **Filter by member** — View tasks related to a specific member
+- **Sort by time** — Newest created or recently updated tasks first
+
+### Task Cards
+
+Each task is displayed as a card showing:
+
+- Task title and description summary
+- Current status (color-coded)
+- Assignee avatar
+- Creation time and last update time
+- Resource count badge

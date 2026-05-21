@@ -1,17 +1,27 @@
 ---
 title: Deployment Guide
-description: Complete guide to self-hosting the Manager server
+description: Complete guide to deploying and maintaining a self-hosted Manager server
 ---
+
+## Overview
+
+Envoy uses a client-server architecture. Team members use the desktop client, and all data is routed and stored through the **Manager server**. This guide covers how to deploy and maintain a Manager server.
 
 ## System Requirements
 
-- **Node.js**: 22.12.0+
-- **Memory**: 2GB+ recommended
-- **Disk**: 10GB+ recommended (depends on team size)
+| Item | Minimum | Recommended |
+|------|---------|-------------|
+| **OS** | Linux / macOS / Windows | Ubuntu 22.04+ |
+| **Node.js** | 22.12.0+ | 22 LTS |
+| **Memory** | 1GB | 2GB+ |
+| **Disk** | 5GB | 10GB+ (depends on team size and files) |
+| **Network** | Accessible by team members | LAN Gigabit or 10Mbps+ public bandwidth |
+
+> The Manager server uses the filesystem for data storage (JSON + files). No database required. The data directory is configurable, defaulting to `./data`.
 
 ## Quick Start
 
-### 1. Get the Code
+### 1. Get the Source Code
 
 ```bash
 git clone https://github.com/xiangxinji/EnvoyClient.git
@@ -28,13 +38,17 @@ npm install
 npm run manager:server:install
 ```
 
-### 3. Start Manager
+### 3. Start the Manager Server
 
 ```bash
 npm run manager:server
 ```
 
-Manager runs on `http://localhost:3000` by default.
+The server starts on `http://localhost:3000` by default. You should see output like:
+
+```
+Manager server running on http://localhost:3000
+```
 
 ### 4. Start Manager Web
 
@@ -42,46 +56,214 @@ Manager runs on `http://localhost:3000` by default.
 npm run manager:web
 ```
 
-Manager Web interface runs on `http://localhost:5174` by default.
+The Manager Web admin interface runs on `http://localhost:5174` by default. Open this URL in a browser to manage teams, users, and AI configuration.
+
+> Manager Web is an admin tool. Regular team members only need the desktop client — they don't need access to the web interface.
 
 ## Configuration
 
 ### Environment Variables
 
+The Manager server supports configuration via environment variables:
+
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `PORT` | 3000 | Server port |
-| `DATA_DIR` | `./data` | Data storage directory |
+| `PORT` | `3000` | Server listen port |
+| `DATA_DIR` | `./data` | Data storage directory (absolute or relative path) |
+
+Setting environment variables:
+
+```bash
+# Linux / macOS
+export PORT=8080
+export DATA_DIR=/var/lib/envoy
+npm run manager:server
+
+# Windows (PowerShell)
+$env:PORT=8080
+$env:DATA_DIR=C:\envoy-data
+npm run manager:server
+```
+
+### Data Directory Structure
+
+```
+data/
+├── teams/           # Team data
+│   └── {teamName}/
+│       ├── settings.yml    # Team settings
+│       ├── users/          # User data
+│       ├── messages/       # Message history
+│       ├── tasks/          # Task data
+│       └── resources/      # Shared file resources
+└── config.yml       # Global configuration
+```
 
 ### AI Configuration
 
-Configure in the Manager Web interface:
+Configure AI features in the Manager Web interface:
 
-1. Go to Settings
-2. Fill in AI provider configuration
-3. API endpoint and key
-4. Select model
+1. Open `http://localhost:5174`
+2. Navigate to **Settings → AI Configuration**
+3. Fill in:
+
+| Setting | Description | Example |
+|---------|-------------|---------|
+| AI Provider | Service provider | OpenAI, DeepSeek, etc. |
+| API Endpoint | Interface URL | `https://api.openai.com/v1` |
+| API Key | Secret key | `sk-...` |
+| Model | Model name | `gpt-4o`, `deepseek-chat` |
+
+> AI configuration supports any **OpenAI-compatible interface**, including locally deployed model services (like Ollama, vLLM).
 
 ## Docker Deployment
 
+Docker simplifies deployment and is recommended for production environments.
+
+### Build the Image
+
 ```bash
 docker build -t envoy-manager .
-docker run -d -p 3000:3000 -v envoy-data:/app/data envoy-manager
+```
+
+### Run the Container
+
+```bash
+# Basic run
+docker run -d \
+  --name envoy-manager \
+  -p 3000:3000 \
+  -v envoy-data:/app/data \
+  envoy-manager
+
+# Custom port and data directory
+docker run -d \
+  --name envoy-manager \
+  -p 8080:8080 \
+  -e PORT=8080 \
+  -v /path/to/data:/app/data \
+  envoy-manager
+```
+
+### Docker Compose
+
+Create a `docker-compose.yml`:
+
+```yaml
+version: '3.8'
+services:
+  manager:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - envoy-data:/app/data
+    restart: unless-stopped
+
+volumes:
+  envoy-data:
+```
+
+```bash
+docker compose up -d
 ```
 
 ## Network Configuration
 
-Team members need access to the Manager server:
+Team members need to be able to reach the Manager server. Choose the right approach for your deployment:
 
-- Ensure firewall allows the corresponding port
-- Use internal IP for LAN deployment
-- Use HTTPS for remote deployment
+### LAN Deployment
+
+Best for teams in the same office or VPN network:
+
+- Ensure the firewall allows inbound connections on the Manager port
+- Clients connect using the server's internal IP (e.g., `http://192.168.1.100:3000`)
+- No domain name or SSL certificate needed
+
+### Public Internet Deployment
+
+Best for remote teams or cross-region collaboration:
+
+- Use a reverse proxy (Nginx, Caddy) to expose the Manager service to the internet
+- **HTTPS is strongly recommended** to protect communications
+- Configure DNS to point your domain to the server IP
+
+#### Nginx Reverse Proxy Example
+
+```nginx
+server {
+    listen 443 ssl;
+    server_name envoy.example.com;
+
+    ssl_certificate /path/to/cert.pem;
+    ssl_certificate_key /path/to/key.pem;
+
+    location / {
+        proxy_pass http://127.0.0.1:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+}
+```
+
+> WebSocket upgrade headers are required — Envoy uses WebSocket for real-time message delivery.
 
 ## Data Backup
 
-Data is stored in the `DATA_DIR` directory. Back up this directory regularly.
+All Manager server data is stored in the `DATA_DIR` directory. Regularly backing up this directory protects all your data.
+
+### Manual Backup
 
 ```bash
-# Manual backup
+# Create a dated backup copy
 cp -r ./data ./data-backup-$(date +%Y%m%d)
+
+# Or use tar compression (saves space)
+tar -czf envoy-backup-$(date +%Y%m%d).tar.gz ./data
 ```
+
+### Automated Backup (cron)
+
+```bash
+# Daily backup at 3 AM
+# Edit crontab: crontab -e
+0 3 * * * tar -czf /backup/envoy-$(date +\%Y\%m\%d).tar.gz /path/to/data
+```
+
+### Restoring Data
+
+```bash
+# Stop the Manager server
+# Restore the data directory
+cp -r ./data-backup-20260521 ./data
+
+# Restart the Manager server
+npm run manager:server
+```
+
+## Troubleshooting
+
+### Port Already in Use
+
+```
+Error: listen EADDRINUSE: address already in use :::3000
+```
+
+**Solution**: Change the `PORT` environment variable to use a different port, or stop the process using port 3000.
+
+### Client Cannot Connect
+
+1. Check if the Manager server is running
+2. Verify the server address entered in the client is correct
+3. Check firewall rules for the corresponding port
+4. If using Docker, verify port mapping is correct
+
+### AI Features Not Available
+
+1. Check AI configuration in Manager Web
+2. Confirm the API Key is valid and has sufficient balance
+3. Ensure the API endpoint is reachable from the server
+4. Check Manager server logs for error messages

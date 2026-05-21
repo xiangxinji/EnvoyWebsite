@@ -13,7 +13,7 @@ const altLabel = altLocale === 'en' ? 'EN' : '中';
 <nav class="navbar">
   <div class="navbar-inner">
     <a href={path(locale === 'en' ? '/en' : '/')} class="navbar-logo">
-      <span class="logo-icon">◆</span>
+      <img src="/logo.png" alt="Envoy" class="logo-img" />
       <span class="logo-text">Envoy</span>
     </a>
     <div class="navbar-links">
@@ -72,9 +72,11 @@ const altLabel = altLocale === 'en' ? 'EN' : '中';
     text-decoration: none;
   }
 
-  .logo-icon {
-    color: var(--accent);
-    font-size: 20px;
+  .logo-img {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    flex-shrink: 0;
   }
 
   .navbar-links {

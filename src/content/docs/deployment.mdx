@@ -1,17 +1,27 @@
 ---
 title: 部署指南
-description: 自托管 Manager 服务器的完整指南
+description: 自托管 Manager 服务器的完整部署与运维指南
 ---
+
+## 概述
+
+Envoy 采用客户端-服务器架构。团队成员使用桌面客户端，所有数据通过 **Manager 服务器** 中转和存储。本文档介绍如何部署和运维 Manager 服务器。
 
 ## 系统要求
 
-- **Node.js**: 22.12.0+
-- **内存**: 建议 2GB+
-- **磁盘**: 根据团队规模，建议 10GB+
+| 项目 | 最低要求 | 推荐配置 |
+|------|---------|---------|
+| **操作系统** | Linux / macOS / Windows | Ubuntu 22.04+ |
+| **Node.js** | 22.12.0+ | 22 LTS |
+| **内存** | 1GB | 2GB+ |
+| **磁盘** | 5GB | 10GB+（取决于团队规模和文件数量） |
+| **网络** | 团队成员可访问 | 局域网千兆或公网带宽 10Mbps+ |
+
+> Manager 服务器使用文件系统存储数据（JSON + 文件），无需数据库。数据目录可配置，默认为 `./data`。
 
 ## 快速开始
 
-### 1. 获取代码
+### 1. 获取源代码
 
 ```bash
 git clone https://github.com/xiangxinji/EnvoyClient.git
@@ -21,69 +31,239 @@ cd EnvoyClient
 ### 2. 安装依赖
 
 ```bash
-# 主项目依赖
+# 安装主项目依赖
 npm install
 
-# Manager 服务端依赖
+# 安装 Manager 服务端依赖
 npm run manager:server:install
 ```
 
-### 3. 启动 Manager
+### 3. 启动 Manager 服务器
 
 ```bash
 npm run manager:server
 ```
 
-Manager 服务默认运行在 `http://localhost:3000`。
+服务器启动后默认监听 `http://localhost:3000`。你应该能看到类似以下输出：
 
-### 4. 启动 Manager Web
+```
+Manager server running on http://localhost:3000
+```
+
+### 4. 启动 Manager Web 管理界面
 
 ```bash
 npm run manager:web
 ```
 
-Manager Web 管理界面默认运行在 `http://localhost:5174`。
+Web 管理界面默认运行在 `http://localhost:5174`。打开浏览器访问此地址，可以进行团队管理、用户管理和 AI 配置等操作。
+
+> Manager Web 是管理员工具，普通团队成员只需要桌面客户端，不需要访问 Web 管理界面。
 
 ## 配置
 
 ### 环境变量
 
-Manager 服务端支持以下环境变量：
+Manager 服务器支持通过环境变量配置：
 
 | 变量 | 默认值 | 说明 |
 |------|--------|------|
-| `PORT` | 3000 | 服务端口 |
-| `DATA_DIR` | `./data` | 数据存储目录 |
+| `PORT` | `3000` | 服务器监听端口 |
+| `DATA_DIR` | `./data` | 数据存储目录（绝对路径或相对路径） |
+
+设置环境变量的方式：
+
+```bash
+# Linux / macOS
+export PORT=8080
+export DATA_DIR=/var/lib/envoy
+npm run manager:server
+
+# Windows (PowerShell)
+$env:PORT=8080
+$env:DATA_DIR=C:\envoy-data
+npm run manager:server
+```
+
+### 数据目录结构
+
+```
+data/
+├── teams/           # 团队数据
+│   └── {teamName}/
+│       ├── settings.yml    # 团队设置
+│       ├── users/          # 用户数据
+│       ├── messages/       # 消息历史
+│       ├── tasks/          # 任务数据
+│       └── resources/      # 共享文件资源
+└── config.yml       # 全局配置
+```
 
 ### AI 配置
 
-在 Manager Web 管理界面中配置：
+在 Manager Web 管理界面中配置 AI 功能：
 
-1. 进入设置页面
-2. 填写 AI 提供商配置
-3. API 端点和密钥
-4. 选择模型
+1. 打开 `http://localhost:5174`
+2. 进入 **设置 → AI 配置**
+3. 填写配置：
+
+| 配置项 | 说明 | 示例 |
+|--------|------|------|
+| AI 提供商 | 服务提供商 | OpenAI、DeepSeek 等 |
+| API 端点 | 接口地址 | `https://api.openai.com/v1` |
+| API Key | 密钥 | `sk-...` |
+| 模型 | 模型名称 | `gpt-4o`、`deepseek-chat` |
+
+> AI 配置支持任何 **OpenAI 兼容接口**，包括本地部署的模型服务（如 Ollama、vLLM）。
 
 ## Docker 部署
 
+使用 Docker 可以简化部署流程，适合生产环境。
+
+### 构建镜像
+
 ```bash
 docker build -t envoy-manager .
-docker run -d -p 3000:3000 -v envoy-data:/app/data envoy-manager
+```
+
+### 运行容器
+
+```bash
+# 基本运行
+docker run -d \
+  --name envoy-manager \
+  -p 3000:3000 \
+  -v envoy-data:/app/data \
+  envoy-manager
+
+# 自定义端口和数据目录
+docker run -d \
+  --name envoy-manager \
+  -p 8080:8080 \
+  -e PORT=8080 \
+  -v /path/to/data:/app/data \
+  envoy-manager
+```
+
+### Docker Compose
+
+创建 `docker-compose.yml`：
+
+```yaml
+version: '3.8'
+services:
+  manager:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - envoy-data:/app/data
+    restart: unless-stopped
+
+volumes:
+  envoy-data:
+```
+
+```bash
+docker compose up -d
 ```
 
 ## 网络配置
 
-团队成员需要能够访问 Manager 服务：
+团队成员需要能够访问 Manager 服务器。根据部署场景选择合适的方案：
 
-- 确保防火墙允许对应端口
-- 局域网部署使用内网 IP
-- 远程部署建议使用 HTTPS
+### 局域网部署
+
+适合团队在同一个办公室或 VPN 网络中：
+
+- 确保防火墙允许 Manager 端口的入站连接
+- 客户端使用服务器内网 IP 连接（如 `http://192.168.1.100:3000`）
+- 无需域名和 SSL 证书
+
+### 公网部署
+
+适合远程团队或跨地域协作：
+
+- 使用反向代理（Nginx、Caddy）将 Manager 服务暴露到公网
+- **强烈建议使用 HTTPS**，保护通信安全
+- 配置域名解析到服务器 IP
+
+#### Nginx 反向代理示例
+
+```nginx
+server {
+    listen 443 ssl;
+    server_name envoy.example.com;
+
+    ssl_certificate /path/to/cert.pem;
+    ssl_certificate_key /path/to/key.pem;
+
+    location / {
+        proxy_pass http://127.0.0.1:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+}
+```
+
+> WebSocket 升级头是必需的，Envoy 使用 WebSocket 进行实时消息推送。
 
 ## 数据备份
 
-数据存储在 `DATA_DIR` 目录中，定期备份该目录即可。
+Manager 服务器的所有数据存储在 `DATA_DIR` 目录中。定期备份此目录即可保护所有数据。
+
+### 手动备份
 
 ```bash
-# 手动备份
+# 创建带日期的备份副本
 cp -r ./data ./data-backup-$(date +%Y%m%d)
+
+# 或使用 tar 压缩（节省空间）
+tar -czf envoy-backup-$(date +%Y%m%d).tar.gz ./data
 ```
+
+### 自动备份 (cron)
+
+```bash
+# 每天凌晨 3 点自动备份
+# 编辑 crontab: crontab -e
+0 3 * * * tar -czf /backup/envoy-$(date +\%Y\%m\%d).tar.gz /path/to/data
+```
+
+### 恢复数据
+
+```bash
+# 停止 Manager 服务器
+# 恢复数据目录
+cp -r ./data-backup-20260521 ./data
+
+# 重启 Manager 服务器
+npm run manager:server
+```
+
+## 常见问题
+
+### 端口被占用
+
+```
+Error: listen EADDRINUSE: address already in use :::3000
+```
+
+解决方案：修改 `PORT` 环境变量使用其他端口，或停止占用 3000 端口的程序。
+
+### 客户端无法连接
+
+1. 检查 Manager 服务器是否正在运行
+2. 确认客户端输入的服务器地址正确
+3. 检查防火墙规则是否允许对应端口
+4. 如果使用 Docker，确认端口映射正确
+
+### AI 功能不可用
+
+1. 检查 Manager Web 中的 AI 配置是否正确
+2. 确认 API Key 有效且有余额
+3. 确认 API 端点可从服务器访问
+4. 查看 Manager 服务器日志中的错误信息

@@ -1,40 +1,117 @@
 ---
 title: Chat
-description: Send messages, use channels and mentions
+description: Private messaging, channels, file sharing, and cloud resource references
 ---
+
+## Overview
+
+Envoy's chat system is the core of daily team communication. It supports one-on-one private chats, team channels, rich text messages, file sharing, and cloud resource references for efficient and organized communication.
 
 ## Sending Messages
 
-Click any member in the member list to open a private conversation. Type your message in the input box and press Enter to send.
+### Private Chat
+
+Click any member in the **Member List** on the left sidebar to open a private conversation.
+
+- Type your message in the input box and press **Enter** to send
+- Press **Shift + Enter** for a new line
+- Messages cannot be edited after sending, but you can delete your own messages
 
 ### Rich Text Support
 
-Chat supports the following formats:
+The chat input box supports the following formats:
 
-- **Markdown** — Bold, italic, code, etc.
-- **Code blocks** — Wrapped in triple backticks with syntax highlighting
-- **Images** — Drag and drop or paste images
-- **Files** — Click the attachment button to upload files
+| Format | Syntax | Example |
+|--------|--------|---------|
+| **Bold** | `**text**` | **Important notice** |
+| *Italic* | `*text*` | *Will handle later* |
+| `Inline code` | `` `code` `` | `console.log()` |
+| Code block | Wrapped in ` ```language ` | With syntax highlighting |
+| ~~Strikethrough~~ | `~~text~~` | ~~Old plan~~ |
+
+### Sending Images
+
+Envoy supports multiple ways to send images:
+
+- **Drag & Drop** — Drag image files directly into the chat window
+- **Paste** — Copy an image and paste with `Ctrl/Cmd + V` in the input box
+- **Attachment button** — Click the 📎 button next to the input box to select a local image
+
+Sent images display as thumbnails in the message stream. Click to view fullscreen.
+
+### Sending Files
+
+Click the **📎 attachment button** next to the input box and select any file to send. Recipients can download files directly.
+
+There are no file type restrictions, but individual files should ideally be under 50MB.
 
 ## Channels
 
-Channels are public discussion areas within the team. All team members can view and send channel messages.
+Channels are public discussion spaces within the team. All members can view and send messages.
 
-### Channel Types
+### General Channel
 
-- **General** — The default team channel, all members auto-join
-- **Custom** — Team admins can create new channels
+Every team automatically gets a **#General** channel when created. All new members are automatically added. Ideal for team announcements and general discussions.
 
-## Mentions (@)
+### Custom Channels
 
-Use `@username` in messages to mention a member. The mentioned member will receive a notification.
+Team admins (Leaders) can create custom channels to organize discussions by project, department, or topic.
 
-## Cloud Resource References
+Typical channel usage:
 
-Type `@cloud` in a message to reference files from the team cloud resources. Recipients can click to view directly.
+- **#project-name** — Project-related discussions and updates
+- **#tech-sharing** — Technical articles and knowledge sharing
+- **#watercooler** — Non-work related conversations
 
 ## Message Actions
 
-- **Reply** — Reply to a specific message
-- **Forward** — Forward a message to another member
-- **Delete** — Delete your own messages
+Hover over a message to reveal action buttons:
+
+### Reply
+
+Click the **↩ Reply** button to reply to a specific message. Replies are displayed with a quote reference for context.
+
+Use cases:
+- Reply to a specific message in a channel to avoid context confusion
+- Add supplementary information or follow-up questions
+
+### Forward
+
+Click the **↗ Forward** button to forward a message to another member or channel.
+
+Forwarding preserves the original message content and sender information. Recipients can see it's a forwarded message.
+
+### Delete
+
+Click the **🗑 Delete** button to remove your own message. This action cannot be undone.
+
+> Deleted messages in channels are removed for everyone. Deleted messages in private chats only disappear from the deleter's view.
+
+## Mentions (@)
+
+Use `@username` in messages to mention a specific member. The mentioned member receives an in-app notification.
+
+- Type `@` to open a member list for quick selection
+- Mentioned names are highlighted in the message
+- Particularly useful in channels to ensure important messages get attention
+
+## Cloud Resource References
+
+Type `@cloud` in a message to reference files from the team's shared cloud resources.
+
+1. After typing `@cloud`, a cloud resource file browser pops up
+2. Select the file you want to share
+3. The file appears as a card embedded in the message
+
+Recipients can click the card to view or download the file directly.
+
+> Cloud resources are a shared file storage space for the team, ideal for project documents, design assets, and other shared files. See the "Task Resources" section in [Task Management](/en/tasks).
+
+## Keyboard Shortcuts
+
+| Shortcut | Action |
+|----------|--------|
+| `Enter` | Send message |
+| `Shift + Enter` | New line |
+| `Ctrl/Cmd + V` | Paste image |
+| `Esc` | Cancel reply / cancel reference |

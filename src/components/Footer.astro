@@ -8,8 +8,10 @@ const t = useTranslations(locale);
 <footer class="footer">
   <div class="footer-inner">
     <div class="footer-brand">
-      <span class="logo-icon">◆</span>
-      <span class="logo-text">Envoy</span>
+      <div class="footer-logo">
+        <img src="/logo.png" alt="Envoy" class="logo-img" />
+        <span class="logo-text">Envoy</span>
+      </div>
       <p>{t('footer.description')}</p>
     </div>
     <div class="footer-links">
@@ -35,8 +37,10 @@ const t = useTranslations(locale);
 
 <style>
   .footer {
-    background: var(--bg-secondary);
-    border-top: 1px solid var(--border);
+    background: var(--glass-bg-heavy);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border-top: 1px solid var(--glass-border);
     padding: var(--space-2xl) var(--space-xl) var(--space-lg);
     margin-top: 80px;
   }
@@ -53,9 +57,17 @@ const t = useTranslations(locale);
     max-width: 280px;
   }
 
-  .footer-brand .logo-icon {
-    color: var(--accent);
-    font-size: 20px;
+  .footer-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .logo-img {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    flex-shrink: 0;
   }
 
   .footer-brand .logo-text {
@@ -89,6 +101,7 @@ const t = useTranslations(locale);
     font-size: 13px;
     padding: 3px 0;
     text-decoration: none;
+    transition: color 0.2s;
   }
 
   .footer-col a:hover {
@@ -99,7 +112,7 @@ const t = useTranslations(locale);
     max-width: 1200px;
     margin: var(--space-xl) auto 0;
     padding-top: var(--space-md);
-    border-top: 1px solid var(--border);
+    border-top: 1px solid var(--glass-border);
   }
 
   .footer-bottom p {
