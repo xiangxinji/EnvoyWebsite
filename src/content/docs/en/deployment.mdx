@@ -1,0 +1,87 @@
+---
+title: Deployment Guide
+description: Complete guide to self-hosting the Manager server
+---
+
+## System Requirements
+
+- **Node.js**: 22.12.0+
+- **Memory**: 2GB+ recommended
+- **Disk**: 10GB+ recommended (depends on team size)
+
+## Quick Start
+
+### 1. Get the Code
+
+```bash
+git clone https://github.com/xiangxinji/EnvoyClient.git
+cd EnvoyClient
+```
+
+### 2. Install Dependencies
+
+```bash
+# Main project dependencies
+npm install
+
+# Manager server dependencies
+npm run manager:server:install
+```
+
+### 3. Start Manager
+
+```bash
+npm run manager:server
+```
+
+Manager runs on `http://localhost:3000` by default.
+
+### 4. Start Manager Web
+
+```bash
+npm run manager:web
+```
+
+Manager Web interface runs on `http://localhost:5174` by default.
+
+## Configuration
+
+### Environment Variables
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `PORT` | 3000 | Server port |
+| `DATA_DIR` | `./data` | Data storage directory |
+
+### AI Configuration
+
+Configure in the Manager Web interface:
+
+1. Go to Settings
+2. Fill in AI provider configuration
+3. API endpoint and key
+4. Select model
+
+## Docker Deployment
+
+```bash
+docker build -t envoy-manager .
+docker run -d -p 3000:3000 -v envoy-data:/app/data envoy-manager
+```
+
+## Network Configuration
+
+Team members need access to the Manager server:
+
+- Ensure firewall allows the corresponding port
+- Use internal IP for LAN deployment
+- Use HTTPS for remote deployment
+
+## Data Backup
+
+Data is stored in the `DATA_DIR` directory. Back up this directory regularly.
+
+```bash
+# Manual backup
+cp -r ./data ./data-backup-$(date +%Y%m%d)
+```

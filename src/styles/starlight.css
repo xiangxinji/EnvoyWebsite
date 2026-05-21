@@ -1,0 +1,26 @@
+:root {
+  --sl-font: var(--font-sans);
+  --sl-color-white: var(--text-primary);
+  --sl-color-gray-1: var(--text-secondary);
+  --sl-color-gray-2: var(--text-muted);
+  --sl-color-gray-3: var(--border);
+  --sl-color-gray-4: var(--border-light);
+  --sl-color-gray-5: var(--bg-tertiary);
+  --sl-color-gray-6: var(--bg-secondary);
+  --sl-color-gray-7: var(--bg-primary);
+  --sl-color-accent: var(--accent);
+  --sl-color-accent-high: var(--accent-hover);
+  --sl-color-bg: var(--bg-primary);
+  --sl-color-bg-sidebar: var(--bg-secondary);
+  --sl-color-bg-nav: var(--glass-bg-heavy);
+  --sl-border-radius-medium: var(--radius-md);
+  --sl-border-radius-large: var(--radius-lg);
+}
+
+/* Frosted glass nav bar for docs */
+header.sl-flex.sl-border-b {
+  background: var(--glass-bg-heavy);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border-color: var(--glass-border);
+}

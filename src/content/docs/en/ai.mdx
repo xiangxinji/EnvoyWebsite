@@ -1,0 +1,71 @@
+---
+title: AI Features
+description: AI suggestions, auto-reply, and Agent execution
+---
+
+## AI Overview
+
+Envoy integrates multiple AI features to help teams collaborate more efficiently. AI features require configuring an AI provider on the Manager server.
+
+## Chat Suggestions
+
+Click the lightning button next to the chat input box, and AI will generate a reply suggestion based on recent conversation content.
+
+- Suggestions are generated from the last N messages (N is configurable)
+- You can accept, modify, or ignore suggestions
+- Suggestions stream in real-time via SSE
+
+## Auto-Reply
+
+When auto-reply is enabled, AI automatically generates and sends a reply after receiving a message.
+
+### Configuration
+
+- Enable/disable in settings
+- Set a keyboard shortcut for quick toggle
+- Independent 5-second debounce per conversation
+- Channel messages do not trigger auto-reply
+
+## AI Task Dispatch
+
+In the task dispatch panel, AI can assist with:
+
+- **Task Generation** — Enter a description, AI generates a task plan
+- **Smart Dispatch** — AI assigns tasks based on member capabilities
+
+## Agent Execution
+
+Agent is Envoy's advanced AI feature that can automatically execute tasks.
+
+### Work Modes
+
+- **Auto Mode** — Agent starts executing immediately upon receiving a task
+- **Manual Mode** — Manual confirmation required before Agent starts
+
+### Agent Tools
+
+Agents can use the following tools to complete tasks:
+
+- `shell` — Execute command-line commands
+- `file_read` / `file_write` — Read and write local files
+- `upload_resource` — Upload task resources
+- `cloud_list` / `cloud_upload` — Manage cloud resources
+- `read_skill` — Read skill files
+
+### Execution Flow
+
+1. Receive task, check execution mode
+2. Load skill catalog
+3. Enter ReAct loop (max 20 steps)
+4. Each step: Reason → Select tool → Execute → Observe result
+5. Task completed or step limit reached
+6. Report execution results
+
+## Configuration Requirements
+
+AI features require Manager server configuration:
+
+- AI provider (OpenAI-compatible interface)
+- Model selection
+- API Key
+- Custom endpoint (optional)

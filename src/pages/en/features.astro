@@ -1,0 +1,31 @@
+---
+import LandingLayout from '../../layouts/LandingLayout.astro';
+import GlassCard from '../../components/GlassCard.astro';
+import { useTranslations } from '../../i18n/utils';
+
+const t = useTranslations('en');
+---
+
+<LandingLayout title="Features — Envoy">
+  <section class="features-page">
+    <h1 class="page-title">{t('features.title')}</h1>
+    <p class="page-subtitle">{t('features.subtitle')}</p>
+    <div class="features-grid">
+      <GlassCard title={t('features.chat.title')} description={t('features.chat.description')} icon="💬" />
+      <GlassCard title={t('features.tasks.title')} description={t('features.tasks.description')} icon="📋" />
+      <GlassCard title={t('features.ai.title')} description={t('features.ai.description')} icon="⚡" />
+      <GlassCard title={t('features.cloud.title')} description={t('features.cloud.description')} icon="☁️" />
+      <GlassCard title={t('features.crossPlatform.title')} description={t('features.crossPlatform.description')} icon="🖥" />
+      <GlassCard title={t('features.selfHost.title')} description={t('features.selfHost.description')} icon="🔒" />
+    </div>
+  </section>
+</LandingLayout>
+
+<style>
+  .features-page { max-width: 1200px; margin: 0 auto; padding: 100px var(--space-xl) 60px; }
+  .page-title { text-align: center; font-size: 36px; font-weight: 700; color: var(--text-primary); margin-bottom: var(--space-sm); }
+  .page-subtitle { text-align: center; font-size: 16px; color: var(--text-secondary); margin-bottom: var(--space-2xl); }
+  .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-lg); }
+  @media (max-width: 1024px) { .features-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 768px) { .features-grid { grid-template-columns: 1fr; } .page-title { font-size: 28px; } }
+</style>

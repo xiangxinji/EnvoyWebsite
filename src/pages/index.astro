@@ -1,0 +1,363 @@
+---
+import LandingLayout from '../layouts/LandingLayout.astro';
+import MacWindow from '../components/MacWindow.astro';
+import GlassCard from '../components/GlassCard.astro';
+import { useTranslations, path } from '../i18n/utils';
+
+const t = useTranslations('zh');
+---
+
+<LandingLayout title="Envoy — 团队协作，由此启程">
+  <section class="hero">
+    <div class="hero-content">
+      <h1 class="hero-title">{t('hero.title')}</h1>
+      <p class="hero-subtitle">{t('hero.subtitle')}</p>
+      <p class="hero-desc">{t('hero.description')}</p>
+      <div class="hero-actions">
+        <a href={path('/download')} class="btn-primary">{t('hero.download')}</a>
+        <a href={path('/getting-started')} class="btn-secondary">{t('hero.viewDocs')} →</a>
+      </div>
+    </div>
+    <div class="hero-preview fade-in">
+      <MacWindow title="Envoy">
+        <div class="preview-content">
+          <div class="preview-sidebar">
+            <div class="preview-member online">
+              <span class="avatar">A</span>
+              <span class="name">Alice</span>
+            </div>
+            <div class="preview-member online">
+              <span class="avatar">B</span>
+              <span class="name">Bob</span>
+            </div>
+            <div class="preview-member">
+              <span class="avatar">C</span>
+              <span class="name">Carol</span>
+            </div>
+            <div class="preview-channel">
+              <span class="channel-icon">#</span>
+              <span class="name">设计组</span>
+            </div>
+          </div>
+          <div class="preview-main">
+            <div class="preview-chat">
+              <div class="msg other">
+                <span class="msg-avatar">A</span>
+                <span class="msg-text">UI 评审的文件已经上传到云资源了</span>
+              </div>
+              <div class="msg mine">
+                <span class="msg-text">收到，我马上查看</span>
+              </div>
+            </div>
+            <div class="preview-tasks">
+              <div class="task-card">
+                <span class="task-status running"></span>
+                <span class="task-text">首页设计评审</span>
+                <span class="task-tag">进行中</span>
+              </div>
+              <div class="task-card">
+                <span class="task-status done"></span>
+                <span class="task-text">组件库更新</span>
+                <span class="task-tag completed">已完成</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </MacWindow>
+    </div>
+  </section>
+
+  <section class="features-section">
+    <h2 class="section-title">{t('features.title')}</h2>
+    <p class="section-subtitle">{t('features.subtitle')}</p>
+    <div class="features-grid">
+      <GlassCard title={t('features.chat.title')} description={t('features.chat.description')} icon="💬" />
+      <GlassCard title={t('features.tasks.title')} description={t('features.tasks.description')} icon="📋" />
+      <GlassCard title={t('features.ai.title')} description={t('features.ai.description')} icon="⚡" />
+      <GlassCard title={t('features.cloud.title')} description={t('features.cloud.description')} icon="☁️" />
+      <GlassCard title={t('features.crossPlatform.title')} description={t('features.crossPlatform.description')} icon="🖥" />
+      <GlassCard title={t('features.selfHost.title')} description={t('features.selfHost.description')} icon="🔒" />
+    </div>
+  </section>
+</LandingLayout>
+
+<style>
+  .hero {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 120px var(--space-xl) 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--space-2xl);
+  }
+
+  .hero-content {
+    max-width: 600px;
+  }
+
+  .hero-title {
+    font-size: 48px;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.2;
+    margin-bottom: var(--space-md);
+  }
+
+  .hero-subtitle {
+    font-size: 20px;
+    color: var(--accent);
+    font-weight: 500;
+    margin-bottom: var(--space-md);
+  }
+
+  .hero-desc {
+    font-size: 16px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: var(--space-xl);
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: var(--space-md);
+    justify-content: center;
+  }
+
+  .btn-primary {
+    padding: 10px 24px;
+    background: var(--accent);
+    color: var(--text-on-accent);
+    border-radius: var(--radius-md);
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+
+  .btn-primary:hover {
+    background: var(--accent-hover);
+    color: var(--text-on-accent);
+  }
+
+  .btn-secondary {
+    padding: 10px 24px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    color: var(--text-primary);
+    border-radius: var(--radius-md);
+    font-size: 15px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+
+  .btn-secondary:hover {
+    background: var(--glass-bg-heavy);
+    color: var(--text-primary);
+  }
+
+  .hero-preview {
+    width: 100%;
+    max-width: 800px;
+  }
+
+  /* Preview mock content */
+  .preview-content {
+    display: flex;
+    height: 320px;
+  }
+
+  .preview-sidebar {
+    width: 160px;
+    border-right: 1px solid var(--border);
+    padding: var(--space-sm);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .preview-member,
+  .preview-channel {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: 6px 8px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+
+  .avatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--accent-light);
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+
+  .channel-icon {
+    color: var(--text-muted);
+    font-weight: 600;
+    width: 24px;
+    text-align: center;
+  }
+
+  .preview-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .preview-chat {
+    flex: 1;
+    padding: var(--space-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .msg {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-sm);
+    max-width: 80%;
+  }
+
+  .msg.mine {
+    align-self: flex-end;
+    flex-direction: row-reverse;
+  }
+
+  .msg-avatar {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--accent-light);
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+
+  .msg-text {
+    padding: 8px 12px;
+    border-radius: var(--radius-md);
+    font-size: 13px;
+    line-height: 1.4;
+  }
+
+  .msg.other .msg-text {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+  }
+
+  .msg.mine .msg-text {
+    background: var(--accent);
+    color: var(--text-on-accent);
+  }
+
+  .preview-tasks {
+    padding: var(--space-sm) var(--space-md);
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .task-card {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: 6px 10px;
+    background: var(--bg-secondary);
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+  }
+
+  .task-status {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .task-status.running { background: var(--accent); }
+  .task-status.done { background: #34c759; }
+
+  .task-text {
+    flex: 1;
+    color: var(--text-primary);
+  }
+
+  .task-tag {
+    font-size: 11px;
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  .task-tag.completed {
+    color: #34c759;
+  }
+
+  /* Features section */
+  .features-section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 80px var(--space-xl);
+  }
+
+  .section-title {
+    text-align: center;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: var(--space-sm);
+  }
+
+  .section-subtitle {
+    text-align: center;
+    font-size: 16px;
+    color: var(--text-secondary);
+    margin-bottom: var(--space-2xl);
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-lg);
+  }
+
+  @media (max-width: 1024px) {
+    .features-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 768px) {
+    .hero-title { font-size: 32px; }
+    .hero-subtitle { font-size: 16px; }
+    .features-grid { grid-template-columns: 1fr; }
+    .preview-content { height: auto; min-height: 240px; }
+    .preview-sidebar { display: none; }
+  }
+
+  .fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.8s ease forwards;
+    animation-delay: 0.3s;
+  }
+
+  @keyframes fadeInUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>

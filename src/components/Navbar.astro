@@ -1,0 +1,172 @@
+---
+import { getLangFromUrl, useTranslations, switchLocale, path } from '../i18n/utils';
+import ThemeToggle from './ThemeToggle.astro';
+
+const locale = getLangFromUrl(Astro.url);
+const t = useTranslations(locale);
+const currentPath = Astro.url.pathname;
+const altLocale = locale === 'zh' ? 'en' : 'zh';
+const altPath = switchLocale(currentPath, altLocale);
+const altLabel = altLocale === 'en' ? 'EN' : '中';
+---
+
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href={path(locale === 'en' ? '/en' : '/')} class="navbar-logo">
+      <span class="logo-icon">◆</span>
+      <span class="logo-text">Envoy</span>
+    </a>
+    <div class="navbar-links">
+      <a href={path(locale === 'en' ? '/en' : '/')}>{t('nav.home')}</a>
+      <a href={path(locale === 'en' ? '/en/features' : '/features')}>{t('nav.features')}</a>
+      <a href={path(locale === 'en' ? '/en/getting-started' : '/getting-started')}>{t('nav.docs')}</a>
+      <a href={path(locale === 'en' ? '/en/download' : '/download')}>{t('nav.download')}</a>
+    </div>
+    <div class="navbar-actions">
+      <a href={altPath} class="lang-toggle">{altLabel}</a>
+      <ThemeToggle />
+    </div>
+    <button class="mobile-menu-btn" aria-label="Menu" id="mobile-menu-btn">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="mobile-menu" id="mobile-menu">
+    <a href={path(locale === 'en' ? '/en' : '/')}>{t('nav.home')}</a>
+    <a href={path(locale === 'en' ? '/en/features' : '/features')}>{t('nav.features')}</a>
+    <a href={path(locale === 'en' ? '/en/getting-started' : '/getting-started')}>{t('nav.docs')}</a>
+    <a href={path(locale === 'en' ? '/en/download' : '/download')}>{t('nav.download')}</a>
+    <a href={altPath} class="lang-toggle">{altLabel}</a>
+  </div>
+</nav>
+
+<style>
+  .navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: var(--glass-bg-heavy);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border-bottom: 1px solid var(--glass-border);
+  }
+
+  .navbar-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--space-xl);
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .navbar-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 18px;
+    text-decoration: none;
+  }
+
+  .logo-icon {
+    color: var(--accent);
+    font-size: 20px;
+  }
+
+  .navbar-links {
+    display: flex;
+    gap: var(--space-xl);
+  }
+
+  .navbar-links a {
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .navbar-links a:hover {
+    color: var(--text-primary);
+  }
+
+  .navbar-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+  }
+
+  .lang-toggle {
+    padding: 4px 10px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    background: var(--glass-bg-light);
+    border: 1px solid var(--glass-border);
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+
+  .lang-toggle:hover {
+    color: var(--text-primary);
+    background: var(--glass-bg);
+  }
+
+  .mobile-menu-btn {
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+  }
+
+  .mobile-menu-btn span {
+    display: block;
+    width: 18px;
+    height: 2px;
+    background: var(--text-primary);
+    border-radius: 1px;
+  }
+
+  .mobile-menu {
+    display: none;
+    flex-direction: column;
+    padding: var(--space-md) var(--space-xl) var(--space-lg);
+    background: var(--glass-bg-heavy);
+    border-bottom: 1px solid var(--glass-border);
+  }
+
+  .mobile-menu a {
+    padding: var(--space-sm) 0;
+    color: var(--text-secondary);
+    font-size: 15px;
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  @media (max-width: 768px) {
+    .navbar-links,
+    .navbar-actions {
+      display: none;
+    }
+    .mobile-menu-btn {
+      display: flex;
+    }
+    .mobile-menu.open {
+      display: flex;
+    }
+  }
+</style>
+
+<script>
+  document.getElementById('mobile-menu-btn')?.addEventListener('click', () => {
+    document.getElementById('mobile-menu')?.classList.toggle('open');
+  });
+</script>

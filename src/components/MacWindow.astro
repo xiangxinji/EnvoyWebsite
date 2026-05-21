@@ -1,0 +1,82 @@
+---
+interface Props {
+  title?: string;
+}
+
+const { title = 'Envoy' } = Astro.props;
+---
+
+<div class="mac-window">
+  <div class="title-bar">
+    <div class="traffic-lights">
+      <span class="light red"></span>
+      <span class="light yellow"></span>
+      <span class="light green"></span>
+    </div>
+    <span class="title">{title}</span>
+    <div class="title-spacer"></div>
+  </div>
+  <div class="window-body">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .mac-window {
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    box-shadow: var(--glass-shadow-heavy);
+  }
+
+  .title-bar {
+    display: flex;
+    align-items: center;
+    padding: 10px 14px;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border);
+    gap: 10px;
+  }
+
+  .traffic-lights {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  .light {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+
+  .light.red {
+    background: #ff5f56;
+  }
+
+  .light.yellow {
+    background: #ffbd2e;
+  }
+
+  .light.green {
+    background: #27c93f;
+  }
+
+  .title {
+    flex: 1;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-secondary);
+  }
+
+  .title-spacer {
+    width: 52px;
+    flex-shrink: 0;
+  }
+
+  .window-body {
+    min-height: 300px;
+  }
+</style>

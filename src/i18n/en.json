@@ -1,0 +1,59 @@
+{
+  "nav": {
+    "home": "Home",
+    "features": "Features",
+    "download": "Download",
+    "docs": "Docs"
+  },
+  "hero": {
+    "title": "Team Collaboration, Reimagined",
+    "subtitle": "Social · Tasks · AI-Powered",
+    "description": "Envoy unifies team chat, intelligent task dispatch, and AI Agents into one seamless experience.",
+    "download": "Download Envoy",
+    "viewDocs": "View Docs"
+  },
+  "features": {
+    "title": "Core Features",
+    "subtitle": "The all-in-one collaboration tool for modern teams",
+    "chat": {
+      "title": "Instant Messaging",
+      "description": "Real-time messaging, channels, file sharing — zero latency team communication with Markdown, code highlighting, and cloud resource mentions."
+    },
+    "tasks": {
+      "title": "Task Management",
+      "description": "Full lifecycle management from creation to completion. Leaders dispatch, members execute, reviews are transparent."
+    },
+    "ai": {
+      "title": "AI Agent",
+      "description": "Smart chat suggestions, auto-reply, autonomous task execution. AI Agents understand instructions and complete work independently."
+    },
+    "cloud": {
+      "title": "Cloud Resources",
+      "description": "Shared team file space with directory management, inline preview, and message mentions. Resources at your fingertips."
+    },
+    "crossPlatform": {
+      "title": "Cross-Platform",
+      "description": "Native macOS and Windows clients built with Tauri. Lightweight, fast, with deep system integration."
+    },
+    "selfHost": {
+      "title": "Self-Hosted",
+      "description": "Manager server is fully self-hosted. Your data, your control. Docker one-click deployment for privacy-conscious teams."
+    }
+  },
+  "download": {
+    "title": "Download Envoy",
+    "subtitle": "Choose your platform to get started",
+    "macos": "macOS",
+    "windows": "Windows",
+    "comingSoon": "Coming Soon",
+    "systemReq": "System Requirements",
+    "macosReq": "macOS 12+ (Apple Silicon / Intel)",
+    "windowsReq": "Windows 10+ (x64)"
+  },
+  "footer": {
+    "description": "Team collaboration, reimagined. Open-source, self-hosted, AI-powered.",
+    "product": "Product",
+    "resources": "Resources",
+    "community": "Community"
+  }
+}

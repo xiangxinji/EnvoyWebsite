@@ -1,0 +1,59 @@
+{
+  "nav": {
+    "home": "首页",
+    "features": "功能",
+    "download": "下载",
+    "docs": "文档"
+  },
+  "hero": {
+    "title": "团队协作，由此启程",
+    "subtitle": "社交 · 任务 · AI 驱动",
+    "description": "Envoy 将团队聊天、智能任务分派和 AI Agent 融为一体，让团队协作更高效、更智能。",
+    "download": "下载 Envoy",
+    "viewDocs": "查看文档"
+  },
+  "features": {
+    "title": "核心功能",
+    "subtitle": "为现代团队打造的一站式协作工具",
+    "chat": {
+      "title": "即时通讯",
+      "description": "实时消息、频道管理、文件分享，团队沟通零延迟。支持 Markdown、代码高亮和云资源引用。"
+    },
+    "tasks": {
+      "title": "任务管理",
+      "description": "从创建到完成的全生命周期管理。Leader 分派任务，成员执行上报，评审流程清晰透明。"
+    },
+    "ai": {
+      "title": "AI Agent",
+      "description": "智能聊天建议、自动回复、任务自动执行。AI Agent 能理解指令并自主完成工作。"
+    },
+    "cloud": {
+      "title": "云资源",
+      "description": "团队共享文件空间，支持目录管理、在线预览和消息内引用，资源触手可及。"
+    },
+    "crossPlatform": {
+      "title": "跨平台",
+      "description": "macOS 和 Windows 原生客户端，基于 Tauri 构建，轻量快速，系统级集成。"
+    },
+    "selfHost": {
+      "title": "私有部署",
+      "description": "Manager 服务完全自托管，数据自主可控。Docker 一键部署，适合对隐私有要求的团队。"
+    }
+  },
+  "download": {
+    "title": "下载 Envoy",
+    "subtitle": "选择你的平台，开始使用",
+    "macos": "macOS",
+    "windows": "Windows",
+    "comingSoon": "即将支持",
+    "systemReq": "系统要求",
+    "macosReq": "macOS 12+ (Apple Silicon / Intel)",
+    "windowsReq": "Windows 10+ (x64)"
+  },
+  "footer": {
+    "description": "团队协作，由此启程。开源、私有部署、AI 驱动。",
+    "product": "产品",
+    "resources": "资源",
+    "community": "社区"
+  }
+}
