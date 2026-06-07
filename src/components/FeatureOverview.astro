@@ -1,0 +1,162 @@
+---
+import GlassCard from './GlassCard.astro';
+import ProductWorkspace from './ProductWorkspace.astro';
+import MacWindow from './MacWindow.astro';
+import { useTranslations } from '../i18n/utils';
+
+interface Props {
+  locale: 'zh' | 'en';
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+const cards = [
+  ['01', t('features.chat.title'), t('features.chat.description'), 'context'],
+  ['02', t('features.tasks.title'), t('features.tasks.description'), 'dispatch'],
+  ['03', t('features.ai.title'), t('features.ai.description'), 'agent'],
+  ['04', t('features.cloud.title'), t('features.cloud.description'), 'resource'],
+  ['05', t('features.crossPlatform.title'), t('features.crossPlatform.description'), 'desktop'],
+  ['06', t('features.selfHost.title'), t('features.selfHost.description'), 'private'],
+];
+
+const matrix = locale === 'en'
+  ? [
+      ['Team lead', 'assigns work with linked resources'],
+      ['Member', 'executes tasks from the desktop client'],
+      ['AI agent', 'handles repeatable work through local tools'],
+      ['Manager', 'keeps teams, messages, and resources private'],
+    ]
+  : [
+      ['Leader', '带资源派发任务'],
+      ['成员', '在桌面客户端接收并执行'],
+      ['AI Agent', '通过本地工具处理重复工作'],
+      ['Manager', '私有管理团队、消息和资源'],
+    ];
+---
+
+<section class="page-shell features-shell">
+  <div class="container feature-hero">
+    <div class="section-heading">
+      <span class="eyebrow">{locale === 'en' ? 'Capabilities' : '产品能力'}</span>
+      <h1>{t('features.title')}</h1>
+      <p>{t('features.subtitle')}</p>
+    </div>
+    <MacWindow title="envoy://capabilities">
+      <ProductWorkspace locale={locale} />
+    </MacWindow>
+  </div>
+
+  <div class="container capability-grid">
+    {cards.map(([icon, title, description, meta], index) => (
+      <GlassCard icon={icon} title={title} description={description} meta={meta} class:list={{ wide: index === 1 || index === 5 }} />
+    ))}
+  </div>
+
+  <div class="container matrix">
+    <div>
+      <span class="eyebrow">{locale === 'en' ? 'Operating model' : '协作模型'}</span>
+      <h2>{locale === 'en' ? 'Every role has a clear place in the loop' : '每个角色都有清晰位置'}</h2>
+    </div>
+    <div class="matrix-list">
+      {matrix.map(([role, detail]) => (
+        <article>
+          <strong>{role}</strong>
+          <span>{detail}</span>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .features-shell {
+    padding-bottom: 5rem;
+  }
+
+  .feature-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(28rem, 1.15fr);
+    gap: 3rem;
+    align-items: center;
+  }
+
+  .capability-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+    margin-top: 4rem;
+  }
+
+  .capability-grid :global(.feature-card:nth-child(2)),
+  .capability-grid :global(.feature-card:nth-child(6)) {
+    grid-column: span 2;
+  }
+
+  .matrix {
+    display: grid;
+    grid-template-columns: 0.8fr 1.2fr;
+    gap: 2rem;
+    align-items: start;
+    margin-top: 5rem;
+    border-top: 1px solid var(--border);
+    padding-top: 2rem;
+  }
+
+  .matrix h2 {
+    max-width: 12ch;
+    margin-top: 0.8rem;
+    color: var(--text-primary);
+    font-size: clamp(2rem, 4vw, 3.1rem);
+    font-weight: 850;
+    line-height: 1;
+  }
+
+  .matrix-list {
+    display: grid;
+    gap: 1px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--border);
+  }
+
+  .matrix-list article {
+    display: grid;
+    grid-template-columns: 10rem 1fr;
+    gap: 1rem;
+    background: var(--bg-secondary);
+    padding: 1rem;
+  }
+
+  .matrix-list strong {
+    color: var(--text-primary);
+  }
+
+  .matrix-list span {
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  @media (max-width: 980px) {
+    .feature-hero,
+    .matrix {
+      grid-template-columns: 1fr;
+    }
+
+    .capability-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .capability-grid :global(.feature-card:nth-child(2)),
+    .capability-grid :global(.feature-card:nth-child(6)) {
+      grid-column: auto;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .capability-grid,
+    .matrix-list article {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

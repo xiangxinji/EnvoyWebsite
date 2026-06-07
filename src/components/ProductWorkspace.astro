@@ -1,0 +1,314 @@
+---
+interface Props {
+  locale?: 'zh' | 'en';
+}
+
+const { locale = 'zh' } = Astro.props;
+const copy = locale === 'en'
+  ? {
+      channel: 'agent-ops',
+      title: 'Workspace',
+      members: ['Lin', 'Maya', 'Owen'],
+      active: 'Dispatch queue',
+      message: 'Attach the latest audit notes and ask the reviewer agent for a second pass.',
+      reply: 'Task created. Reviewer agent is reading 4 linked resources.',
+      taskOne: 'Review UI audit notes',
+      taskTwo: 'Sync cloud references',
+      running: 'running',
+      done: 'done',
+      panel: 'Agent trace',
+      trace: ['read resources', 'extract risks', 'draft review'],
+    }
+  : {
+      channel: 'agent-ops',
+      title: '工作台',
+      members: ['林澈', 'Maya', 'Owen'],
+      active: '派发队列',
+      message: '附上最新审计记录，让 reviewer agent 做第二轮检查。',
+      reply: '任务已创建。Reviewer agent 正在读取 4 个关联资源。',
+      taskOne: '评审 UI 审计记录',
+      taskTwo: '同步云资源引用',
+      running: '执行中',
+      done: '已完成',
+      panel: 'Agent 轨迹',
+      trace: ['读取资源', '提取风险', '生成评审'],
+    };
+---
+
+<div class="workspace-preview" aria-label="Envoy product workspace preview">
+  <aside class="workspace-sidebar">
+    <div class="workspace-title">{copy.title}</div>
+    <div class="channel"># {copy.channel}</div>
+    <div class="members">
+      {copy.members.map((member, index) => (
+        <div class="member">
+          <span>{member.slice(0, 1)}</span>
+          <strong>{member}</strong>
+          <i class:list={{ online: index < 2 }}></i>
+        </div>
+      ))}
+    </div>
+  </aside>
+
+  <section class="workspace-main">
+    <header>
+      <span>{copy.active}</span>
+      <strong>04</strong>
+    </header>
+
+    <div class="conversation">
+      <div class="bubble incoming">{copy.message}</div>
+      <div class="bubble outgoing">{copy.reply}</div>
+    </div>
+
+    <div class="task-stack">
+      <article>
+        <span class="status running"></span>
+        <div>
+          <strong>{copy.taskOne}</strong>
+          <small>{copy.running} · 73%</small>
+        </div>
+      </article>
+      <article>
+        <span class="status done"></span>
+        <div>
+          <strong>{copy.taskTwo}</strong>
+          <small>{copy.done} · 11:42</small>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <aside class="trace-panel">
+    <span>{copy.panel}</span>
+    {copy.trace.map((item, index) => (
+      <div class="trace-row">
+        <i>{String(index + 1).padStart(2, '0')}</i>
+        <strong>{item}</strong>
+      </div>
+    ))}
+  </aside>
+</div>
+
+<style>
+  .workspace-preview {
+    display: grid;
+    grid-template-columns: 10rem minmax(0, 1fr) 12rem;
+    min-height: 25rem;
+    color: var(--text-primary);
+    min-width: 0;
+  }
+
+  .workspace-sidebar,
+  .workspace-main,
+  .trace-panel {
+    min-width: 0;
+  }
+
+  .workspace-sidebar {
+    padding: 1rem;
+    border-right: 1px solid var(--border);
+    background: rgba(0, 0, 0, 0.14);
+  }
+
+  .workspace-title {
+    margin-bottom: 1rem;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 800;
+  }
+
+  .channel {
+    margin-bottom: 1rem;
+    border-radius: var(--radius-sm);
+    background: var(--accent-soft);
+    color: var(--accent);
+    padding: 0.55rem 0.65rem;
+    font-size: 0.82rem;
+    font-weight: 800;
+  }
+
+  .members {
+    display: grid;
+    gap: 0.35rem;
+  }
+
+  .member {
+    display: grid;
+    grid-template-columns: 1.6rem 1fr auto;
+    align-items: center;
+    gap: 0.45rem;
+    color: var(--text-secondary);
+    font-size: 0.82rem;
+  }
+
+  .member span {
+    display: inline-flex;
+    width: 1.6rem;
+    height: 1.6rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-sm);
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--text-primary);
+    font-size: 0.75rem;
+  }
+
+  .member i {
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 50%;
+    background: var(--text-muted);
+  }
+
+  .member i.online {
+    background: var(--accent);
+  }
+
+  .workspace-main {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    overflow: hidden;
+    padding: 1rem;
+  }
+
+  .workspace-main header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.85rem;
+    color: var(--text-secondary);
+    font-size: 0.82rem;
+    font-weight: 800;
+  }
+
+  .workspace-main header strong,
+  .trace-row i {
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .conversation {
+    display: grid;
+    gap: 0.8rem;
+    padding: 1.15rem 0;
+  }
+
+  .bubble {
+    max-width: 23rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 0.8rem 0.95rem;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.55;
+    overflow-wrap: anywhere;
+  }
+
+  .incoming {
+    background: rgba(255, 255, 255, 0.035);
+  }
+
+  .outgoing {
+    justify-self: end;
+    border-color: var(--accent-border);
+    background: var(--accent-soft);
+    color: var(--text-primary);
+  }
+
+  .task-stack {
+    display: grid;
+    gap: 0.65rem;
+    margin-top: auto;
+  }
+
+  .task-stack article {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.75rem;
+    align-items: center;
+    min-width: 0;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: rgba(255, 255, 255, 0.035);
+    padding: 0.75rem;
+  }
+
+  .status {
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 50%;
+  }
+
+  .status.running {
+    background: var(--warning);
+  }
+
+  .status.done {
+    background: var(--accent);
+  }
+
+  .task-stack strong,
+  .trace-row strong {
+    display: block;
+    color: var(--text-primary);
+    font-size: 0.86rem;
+    overflow-wrap: anywhere;
+  }
+
+  .task-stack div {
+    min-width: 0;
+  }
+
+  .task-stack small {
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+  }
+
+  .trace-panel {
+    display: grid;
+    align-content: start;
+    gap: 0.65rem;
+    padding: 1rem;
+    border-left: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  .trace-panel > span {
+    margin-bottom: 0.35rem;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 800;
+  }
+
+  .trace-row {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 0.65rem;
+    background: rgba(0, 0, 0, 0.12);
+  }
+
+  .trace-row i {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-style: normal;
+    font-size: 0.72rem;
+  }
+
+  @media (max-width: 820px) {
+    .workspace-preview {
+      grid-template-columns: 1fr;
+    }
+
+    .workspace-sidebar,
+    .trace-panel {
+      display: none;
+    }
+  }
+</style>

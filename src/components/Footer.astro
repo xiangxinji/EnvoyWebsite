@@ -3,17 +3,19 @@ import { getLangFromUrl, useTranslations, path } from '../i18n/utils';
 
 const locale = getLangFromUrl(Astro.url);
 const t = useTranslations(locale);
+const logoPath = path('/logo.png');
 ---
 
 <footer class="footer">
   <div class="footer-inner">
     <div class="footer-brand">
       <div class="footer-logo">
-        <img src="/logo.png" alt="Envoy" class="logo-img" />
+        <img src={logoPath} alt="Envoy" class="logo-img" />
         <span class="logo-text">Envoy</span>
       </div>
       <p>{t('footer.description')}</p>
     </div>
+
     <div class="footer-links">
       <div class="footer-col">
         <h4>{t('footer.product')}</h4>
@@ -23,13 +25,21 @@ const t = useTranslations(locale);
       <div class="footer-col">
         <h4>{t('footer.resources')}</h4>
         <a href={path(locale === 'en' ? '/en/getting-started' : '/getting-started')}>{t('nav.docs')}</a>
+        <a href={path(locale === 'en' ? '/en/download' : '/download')}>{t('footer.releases')}</a>
       </div>
       <div class="footer-col">
         <h4>{t('footer.community')}</h4>
         <a href="https://github.com/xiangxinji/EnvoyClient">GitHub</a>
+        <a href="https://github.com/xiangxinji/EnvoyClient/issues">{t('footer.issues')}</a>
+      </div>
+      <div class="footer-col">
+        <h4>{t('footer.legal')}</h4>
+        <a href="https://github.com/xiangxinji/EnvoyClient">{t('footer.privacy')}</a>
+        <a href="https://github.com/xiangxinji/EnvoyClient">{t('footer.terms')}</a>
       </div>
     </div>
   </div>
+
   <div class="footer-bottom">
     <p>&copy; {new Date().getFullYear()} Envoy. All rights reserved.</p>
   </div>
@@ -37,71 +47,66 @@ const t = useTranslations(locale);
 
 <style>
   .footer {
-    background: var(--glass-bg-heavy);
-    backdrop-filter: blur(var(--glass-blur));
-    -webkit-backdrop-filter: blur(var(--glass-blur));
-    border-top: 1px solid var(--glass-border);
-    padding: var(--space-2xl) var(--space-xl) var(--space-lg);
-    margin-top: 80px;
+    border-top: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.02);
+    padding: 3rem 0 1.5rem;
   }
 
   .footer-inner {
-    max-width: 1200px;
+    width: min(var(--container), calc(100% - 2rem));
     margin: 0 auto;
-    display: flex;
-    gap: var(--space-2xl);
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: minmax(14rem, 1.1fr) 2fr;
+    gap: 3rem;
   }
 
   .footer-brand {
-    max-width: 280px;
+    max-width: 22rem;
   }
 
   .footer-logo {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 0.5rem;
   }
 
   .logo-img {
-    width: 28px;
-    height: 28px;
-    border-radius: 6px;
-    flex-shrink: 0;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: var(--radius-sm);
   }
 
-  .footer-brand .logo-text {
-    font-weight: 600;
-    font-size: 18px;
+  .logo-text {
     color: var(--text-primary);
+    font-size: 1.125rem;
+    font-weight: 800;
   }
 
   .footer-brand p {
-    margin-top: var(--space-sm);
+    margin-top: 0.75rem;
     color: var(--text-secondary);
-    font-size: 13px;
-    line-height: 1.5;
+    font-size: 0.9rem;
+    line-height: 1.65;
   }
 
   .footer-links {
-    display: flex;
-    gap: var(--space-2xl);
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.5rem;
   }
 
   .footer-col h4 {
-    font-size: 13px;
-    font-weight: 600;
+    margin-bottom: 0.65rem;
     color: var(--text-primary);
-    margin-bottom: var(--space-sm);
+    font-size: 0.78rem;
+    font-weight: 800;
   }
 
   .footer-col a {
     display: block;
+    padding: 0.22rem 0;
     color: var(--text-secondary);
-    font-size: 13px;
-    padding: 3px 0;
-    text-decoration: none;
-    transition: color 0.2s;
+    font-size: 0.88rem;
   }
 
   .footer-col a:hover {
@@ -109,21 +114,25 @@ const t = useTranslations(locale);
   }
 
   .footer-bottom {
-    max-width: 1200px;
-    margin: var(--space-xl) auto 0;
-    padding-top: var(--space-md);
-    border-top: 1px solid var(--glass-border);
+    width: min(var(--container), calc(100% - 2rem));
+    margin: 2rem auto 0;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
   }
 
   .footer-bottom p {
     color: var(--text-muted);
-    font-size: 12px;
+    font-size: 0.78rem;
   }
 
   @media (max-width: 768px) {
     .footer-inner {
-      flex-direction: column;
-      gap: var(--space-xl);
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .footer-links {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 </style>

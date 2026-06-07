@@ -2,37 +2,62 @@
 import '../styles/global.css';
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
+import { getLangFromUrl, path } from '../i18n/utils';
 
 interface Props {
   title: string;
   description?: string;
 }
 
-const { title, description = 'Envoy — 团队协作，由此启程' } = Astro.props;
+const locale = getLangFromUrl(Astro.url);
+const { title, description = locale === 'en'
+  ? 'Envoy coordinates team chat, task execution, cloud resources, and AI agents in one self-hosted client.'
+  : 'Envoy 将团队聊天、任务执行、云资源和 AI Agent 协作整合到一个可自托管客户端。' } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site).toString();
+const ogImage = new URL(path('/logo.png'), Astro.site).toString();
 ---
 
 <!doctype html>
-<html lang="zh">
+<html lang={locale === 'en' ? 'en' : 'zh-CN'}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
+    <meta name="theme-color" content="#090b0a" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <link rel="canonical" href={canonical} />
     <title>{title}</title>
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <script is:inline>
-      (function() {
-        const theme = localStorage.getItem('theme');
-        if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-          document.documentElement.classList.add('dark');
-        }
-      })();
-    </script>
+    <link rel="icon" type="image/svg+xml" href={path('/favicon.svg')} />
   </head>
   <body>
+    <a class="skip-link" href="#content">Skip to content</a>
     <Navbar />
-    <main>
+    <main id="content">
       <slot />
     </main>
     <Footer />
   </body>
 </html>
+
+<style>
+  .skip-link {
+    position: fixed;
+    top: 0.75rem;
+    left: 0.75rem;
+    z-index: 200;
+    border-radius: var(--radius-sm);
+    background: var(--accent);
+    color: var(--text-on-accent);
+    padding: 0.75rem 1rem;
+    font-weight: 700;
+    transform: translateY(-140%);
+  }
+
+  .skip-link:focus {
+    transform: translateY(0);
+  }
+</style>

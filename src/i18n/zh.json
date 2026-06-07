@@ -3,57 +3,73 @@
     "home": "首页",
     "features": "功能",
     "download": "下载",
-    "docs": "文档"
+    "docs": "文档",
+    "cta": "获取客户端"
   },
   "hero": {
-    "title": "团队协作，由此启程",
-    "subtitle": "社交 · 任务 · AI 驱动",
-    "description": "Envoy 将团队聊天、智能任务分派和 AI Agent 融为一体，让团队协作更高效、更智能。",
+    "eyebrow": "自托管团队协作客户端",
+    "title": "团队任务和 AI Agent 的统一工作台",
+    "subtitle": "Envoy 面向需要本地客户端、私有部署和明确执行链路的技术团队。",
+    "description": "团队聊天、任务派发、执行回传、云资源引用和 Agent 协作在一个界面里闭环，减少跨工具同步成本。",
     "download": "下载 Envoy",
-    "viewDocs": "查看文档"
+    "viewDocs": "阅读部署文档"
+  },
+  "home": {
+    "operationsTitle": "从讨论到执行，不离开工作上下文",
+    "operationsSubtitle": "Envoy 把消息、任务和文件引用绑定到同一条工作流里，管理者能看见任务状态，成员能保留完整上下文。",
+    "workflowTitle": "三步完成团队执行闭环",
+    "workflowSubtitle": "适合小团队、私有网络和需要本地工具链接入的 Agent 工作流。"
   },
   "features": {
-    "title": "核心功能",
-    "subtitle": "为现代团队打造的一站式协作工具",
+    "title": "围绕真实执行链路设计",
+    "subtitle": "不是再做一个聊天室。Envoy 的核心是让消息能变成任务，任务能被成员或 Agent 执行，结果能回到团队上下文。",
     "chat": {
-      "title": "即时通讯",
-      "description": "实时消息、频道管理、文件分享，团队沟通零延迟。支持 Markdown、代码高亮和云资源引用。"
+      "title": "上下文聊天",
+      "description": "支持频道、Markdown、代码片段和资源引用。讨论可以直接连接到任务和执行结果。"
     },
     "tasks": {
-      "title": "任务管理",
-      "description": "从创建到完成的全生命周期管理。Leader 分派任务，成员执行上报，评审流程清晰透明。"
+      "title": "任务派发",
+      "description": "Leader 分派任务，成员接收、执行、回传结果。任务状态、附件和评审记录都在同一处。"
     },
     "ai": {
-      "title": "AI Agent",
-      "description": "智能聊天建议、自动回复、任务自动执行。AI Agent 能理解指令并自主完成工作。"
+      "title": "AI Agent 协作",
+      "description": "Agent 可以参与对话、理解任务指令，并通过本地工具链处理可执行工作。"
     },
     "cloud": {
-      "title": "云资源",
-      "description": "团队共享文件空间，支持目录管理、在线预览和消息内引用，资源触手可及。"
+      "title": "云资源引用",
+      "description": "团队文件以资源形式被管理和引用，消息里可直接关联目录、文档和执行材料。"
     },
     "crossPlatform": {
-      "title": "跨平台",
-      "description": "macOS 和 Windows 原生客户端，基于 Tauri 构建，轻量快速，系统级集成。"
+      "title": "桌面客户端",
+      "description": "基于 Tauri 的 macOS 与 Windows 客户端，适合常驻运行和系统级集成。"
     },
     "selfHost": {
       "title": "私有部署",
-      "description": "Manager 服务完全自托管，数据自主可控。Docker 一键部署，适合对隐私有要求的团队。"
+      "description": "Manager 服务可自托管，数据边界清晰，适合对隐私、内网和审计有要求的团队。"
     }
   },
   "download": {
-    "title": "下载 Envoy",
-    "subtitle": "选择你的平台，开始使用",
+    "title": "选择你的 Envoy 客户端",
+    "subtitle": "当前页面为发布入口。正式安装包准备好后会在这里开放，同时保留源码部署路径。",
     "macos": "macOS",
     "windows": "Windows",
-    "comingSoon": "即将支持",
+    "comingSoon": "安装包准备中",
+    "source": "查看源码",
     "systemReq": "系统要求",
-    "macosReq": "macOS 12+ (Apple Silicon / Intel)",
-    "windowsReq": "Windows 10+ (x64)"
+    "macosReq": "macOS 12 及以上，Apple Silicon 或 Intel",
+    "windowsReq": "Windows 10 及以上，x64",
+    "serverTitle": "Manager 服务",
+    "serverReq": "支持 Docker 或 Node.js 运行环境，用于团队注册、消息和资源管理。"
   },
   "footer": {
-    "description": "团队协作，由此启程。开源、私有部署、AI 驱动。",
+    "description": "Envoy 是面向技术团队的自托管协作客户端，把消息、任务、云资源和 AI Agent 放在同一条执行链路中。",
     "product": "产品",
     "resources": "资源",
-    "community": "社区"
+    "community": "社区",
+    "legal": "合规",
+    "releases": "发布入口",
+    "issues": "问题反馈",
+    "privacy": "隐私说明",
+    "terms": "使用条款"
   }
 }

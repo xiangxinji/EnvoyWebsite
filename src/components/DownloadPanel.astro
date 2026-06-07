@@ -1,0 +1,146 @@
+---
+import { useTranslations, path } from '../i18n/utils';
+
+interface Props {
+  locale: 'zh' | 'en';
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+const docsPath = path(locale === 'en' ? '/en/getting-started' : '/getting-started');
+const platforms = [
+  ['mac', t('download.macos'), t('download.macosReq')],
+  ['win', t('download.windows'), t('download.windowsReq')],
+  ['srv', t('download.serverTitle'), t('download.serverReq')],
+];
+---
+
+<section class="page-shell download-shell">
+  <div class="container download-hero">
+    <div class="section-heading">
+      <span class="eyebrow">{locale === 'en' ? 'Release entry' : '发布入口'}</span>
+      <h1>{t('download.title')}</h1>
+      <p>{t('download.subtitle')}</p>
+    </div>
+    <div class="release-card">
+      <span>{locale === 'en' ? 'Current status' : '当前状态'}</span>
+      <strong>{t('download.comingSoon')}</strong>
+      <p>{locale === 'en' ? 'Use the repository and docs while packaged installers are being prepared.' : '安装包准备期间，可先通过源码仓库和文档了解部署方式。'}</p>
+      <div class="release-actions">
+        <a class="btn btn-primary" href="https://github.com/xiangxinji/EnvoyClient">{t('download.source')}</a>
+        <a class="btn btn-secondary" href={docsPath}>{t('hero.viewDocs')}</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="container platform-grid">
+    {platforms.map(([code, name, req]) => (
+      <article class="platform-card">
+        <span class="platform-code">{code}</span>
+        <h2>{name}</h2>
+        <p>{req}</p>
+        <span class="disabled-action" aria-disabled="true">{t('download.comingSoon')}</span>
+      </article>
+    ))}
+  </div>
+</section>
+
+<style>
+  .download-shell {
+    padding-bottom: 5rem;
+  }
+
+  .download-hero {
+    display: grid;
+    grid-template-columns: 1fr minmax(18rem, 24rem);
+    gap: 3rem;
+    align-items: end;
+  }
+
+  .release-card {
+    border: 1px solid var(--accent-border);
+    border-radius: var(--radius-xl);
+    background: linear-gradient(180deg, var(--accent-soft), rgba(255, 255, 255, 0.03));
+    padding: 1.35rem;
+    box-shadow: var(--shadow-panel);
+  }
+
+  .release-card > span,
+  .platform-code {
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 850;
+  }
+
+  .release-card strong {
+    display: block;
+    margin-top: 0.8rem;
+    color: var(--text-primary);
+    font-size: 1.45rem;
+    line-height: 1.1;
+  }
+
+  .release-card p {
+    margin-top: 0.75rem;
+    color: var(--text-secondary);
+    line-height: 1.65;
+  }
+
+  .release-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+    margin-top: 1.2rem;
+  }
+
+  .platform-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+    margin-top: 3rem;
+  }
+
+  .platform-card {
+    min-height: 18rem;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: rgba(255, 255, 255, 0.035);
+    padding: 1.3rem;
+  }
+
+  .platform-card h2 {
+    margin-top: 1.2rem;
+    color: var(--text-primary);
+    font-size: 1.8rem;
+    line-height: 1;
+  }
+
+  .platform-card p {
+    margin-top: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.65;
+  }
+
+  .disabled-action {
+    margin-top: auto;
+    display: inline-flex;
+    width: fit-content;
+    min-height: 2.5rem;
+    align-items: center;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text-muted);
+    padding: 0 0.85rem;
+    font-weight: 800;
+  }
+
+  @media (max-width: 900px) {
+    .download-hero,
+    .platform-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

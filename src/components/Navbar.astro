@@ -1,40 +1,52 @@
 ---
 import { getLangFromUrl, useTranslations, switchLocale, path } from '../i18n/utils';
-import ThemeToggle from './ThemeToggle.astro';
 
 const locale = getLangFromUrl(Astro.url);
 const t = useTranslations(locale);
-const currentPath = Astro.url.pathname;
+const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
 const altLocale = locale === 'zh' ? 'en' : 'zh';
-const altPath = switchLocale(currentPath, altLocale);
+const altPath = switchLocale(Astro.url.pathname, altLocale);
 const altLabel = altLocale === 'en' ? 'EN' : '中';
+const logoPath = path('/logo.png');
+
+const links = [
+  { href: path(locale === 'en' ? '/en' : '/'), label: t('nav.home') },
+  { href: path(locale === 'en' ? '/en/features' : '/features'), label: t('nav.features') },
+  { href: path(locale === 'en' ? '/en/getting-started' : '/getting-started'), label: t('nav.docs') },
+  { href: path(locale === 'en' ? '/en/download' : '/download'), label: t('nav.download') },
+];
 ---
 
 <nav class="navbar">
   <div class="navbar-inner">
     <a href={path(locale === 'en' ? '/en' : '/')} class="navbar-logo">
-      <img src="/logo.png" alt="Envoy" class="logo-img" />
+      <img src={logoPath} alt="Envoy" class="logo-img" />
       <span class="logo-text">Envoy</span>
     </a>
-    <div class="navbar-links">
-      <a href={path(locale === 'en' ? '/en' : '/')}>{t('nav.home')}</a>
-      <a href={path(locale === 'en' ? '/en/features' : '/features')}>{t('nav.features')}</a>
-      <a href={path(locale === 'en' ? '/en/getting-started' : '/getting-started')}>{t('nav.docs')}</a>
-      <a href={path(locale === 'en' ? '/en/download' : '/download')}>{t('nav.download')}</a>
+
+    <div class="navbar-links" aria-label="Primary navigation">
+      {links.map((link) => {
+        const normalized = link.href.replace(/\/$/, '') || '/';
+        return (
+          <a href={link.href} class:list={{ active: currentPath === normalized }}>
+            {link.label}
+          </a>
+        );
+      })}
     </div>
+
     <div class="navbar-actions">
       <a href={altPath} class="lang-toggle">{altLabel}</a>
-      <ThemeToggle />
+      <a href={path(locale === 'en' ? '/en/download' : '/download')} class="nav-cta">{t('nav.cta')}</a>
     </div>
-    <button class="mobile-menu-btn" aria-label="Menu" id="mobile-menu-btn">
+
+    <button class="mobile-menu-btn" aria-label="Menu" aria-expanded="false" id="mobile-menu-btn">
       <span></span><span></span><span></span>
     </button>
   </div>
+
   <div class="mobile-menu" id="mobile-menu">
-    <a href={path(locale === 'en' ? '/en' : '/')}>{t('nav.home')}</a>
-    <a href={path(locale === 'en' ? '/en/features' : '/features')}>{t('nav.features')}</a>
-    <a href={path(locale === 'en' ? '/en/getting-started' : '/getting-started')}>{t('nav.docs')}</a>
-    <a href={path(locale === 'en' ? '/en/download' : '/download')}>{t('nav.download')}</a>
+    {links.map((link) => <a href={link.href}>{link.label}</a>)}
     <a href={altPath} class="lang-toggle">{altLabel}</a>
   </div>
 </nav>
@@ -42,125 +54,154 @@ const altLabel = altLocale === 'en' ? 'EN' : '中';
 <style>
   .navbar {
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
+    inset: 0 0 auto;
     z-index: 100;
-    background: var(--glass-bg-heavy);
-    backdrop-filter: blur(var(--glass-blur));
-    -webkit-backdrop-filter: blur(var(--glass-blur));
-    border-bottom: 1px solid var(--glass-border);
+    border-bottom: 1px solid var(--border);
+    background: rgba(9, 11, 10, 0.82);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
   }
 
   .navbar-inner {
-    max-width: 1200px;
+    width: min(var(--container), calc(100% - 2rem));
+    height: 64px;
     margin: 0 auto;
-    padding: 0 var(--space-xl);
-    height: 56px;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 1rem;
   }
 
   .navbar-logo {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 0.5rem;
     color: var(--text-primary);
-    font-weight: 600;
-    font-size: 18px;
-    text-decoration: none;
+    font-size: 1.125rem;
+    font-weight: 800;
   }
 
   .logo-img {
-    width: 28px;
-    height: 28px;
-    border-radius: 6px;
-    flex-shrink: 0;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: var(--radius-sm);
   }
 
   .navbar-links {
     display: flex;
-    gap: var(--space-xl);
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: rgba(255, 255, 255, 0.035);
   }
 
   .navbar-links a {
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius-sm);
     color: var(--text-secondary);
-    font-size: 14px;
-    font-weight: 500;
-    text-decoration: none;
-    transition: color 0.2s;
+    font-size: 0.875rem;
+    font-weight: 650;
   }
 
-  .navbar-links a:hover {
+  .navbar-links a:hover,
+  .navbar-links a.active {
+    background: rgba(255, 255, 255, 0.06);
     color: var(--text-primary);
   }
 
   .navbar-actions {
     display: flex;
     align-items: center;
-    gap: var(--space-sm);
+    gap: 0.5rem;
+  }
+
+  .lang-toggle,
+  .nav-cta {
+    display: inline-flex;
+    min-height: 2.25rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-sm);
+    font-size: 0.82rem;
+    font-weight: 800;
   }
 
   .lang-toggle {
-    padding: 4px 10px;
-    border-radius: var(--radius-sm);
-    font-size: 13px;
-    font-weight: 500;
+    min-width: 2.25rem;
+    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.035);
     color: var(--text-secondary);
-    background: var(--glass-bg-light);
-    border: 1px solid var(--glass-border);
-    text-decoration: none;
-    transition: all 0.2s;
   }
 
   .lang-toggle:hover {
+    border-color: var(--border-strong);
     color: var(--text-primary);
-    background: var(--glass-bg);
+  }
+
+  .nav-cta {
+    padding: 0 0.8rem;
+    border: 1px solid var(--accent-border);
+    background: var(--accent);
+    color: var(--text-on-accent);
+  }
+
+  .nav-cta:hover {
+    background: var(--accent-hover);
+    color: var(--text-on-accent);
   }
 
   .mobile-menu-btn {
     display: none;
     flex-direction: column;
-    gap: 4px;
-    background: none;
-    border: none;
+    gap: 0.25rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: rgba(255, 255, 255, 0.035);
+    padding: 0.6rem;
     cursor: pointer;
-    padding: 4px;
   }
 
   .mobile-menu-btn span {
     display: block;
-    width: 18px;
+    width: 1.1rem;
     height: 2px;
-    background: var(--text-primary);
     border-radius: 1px;
+    background: var(--text-primary);
   }
 
   .mobile-menu {
     display: none;
     flex-direction: column;
-    padding: var(--space-md) var(--space-xl) var(--space-lg);
-    background: var(--glass-bg-heavy);
-    border-bottom: 1px solid var(--glass-border);
+    gap: 0.25rem;
+    padding: 0.75rem 1rem 1rem;
+    border-bottom: 1px solid var(--border);
+    background: rgba(9, 11, 10, 0.96);
   }
 
   .mobile-menu a {
-    padding: var(--space-sm) 0;
+    border-radius: var(--radius-sm);
+    padding: 0.8rem 0.9rem;
     color: var(--text-secondary);
-    font-size: 15px;
-    font-weight: 500;
-    text-decoration: none;
+    font-weight: 700;
   }
 
-  @media (max-width: 768px) {
+  .mobile-menu a:hover {
+    background: rgba(255, 255, 255, 0.045);
+    color: var(--text-primary);
+  }
+
+  @media (max-width: 820px) {
     .navbar-links,
     .navbar-actions {
       display: none;
     }
+
     .mobile-menu-btn {
       display: flex;
     }
+
     .mobile-menu.open {
       display: flex;
     }
@@ -168,7 +209,10 @@ const altLabel = altLocale === 'en' ? 'EN' : '中';
 </style>
 
 <script>
-  document.getElementById('mobile-menu-btn')?.addEventListener('click', () => {
-    document.getElementById('mobile-menu')?.classList.toggle('open');
+  const mobileButton = document.getElementById('mobile-menu-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+  mobileButton?.addEventListener('click', () => {
+    const isOpen = mobileMenu?.classList.toggle('open');
+    mobileButton.setAttribute('aria-expanded', String(Boolean(isOpen)));
   });
 </script>

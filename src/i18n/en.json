@@ -3,57 +3,73 @@
     "home": "Home",
     "features": "Features",
     "download": "Download",
-    "docs": "Docs"
+    "docs": "Docs",
+    "cta": "Get client"
   },
   "hero": {
-    "title": "Team Collaboration, Reimagined",
-    "subtitle": "Social · Tasks · AI-Powered",
-    "description": "Envoy unifies team chat, intelligent task dispatch, and AI Agents into one seamless experience.",
+    "eyebrow": "Self-hosted team collaboration client",
+    "title": "One workspace for team tasks and AI agents",
+    "subtitle": "Envoy is built for technical teams that need a desktop client, private deployment, and a clear execution trail.",
+    "description": "Team chat, task dispatch, execution reports, cloud resource mentions, and agent work happen in one interface.",
     "download": "Download Envoy",
-    "viewDocs": "View Docs"
+    "viewDocs": "Read deployment docs"
+  },
+  "home": {
+    "operationsTitle": "Move from discussion to execution without losing context",
+    "operationsSubtitle": "Envoy binds messages, tasks, and file references into one workflow, so leaders see progress and members keep the full brief.",
+    "workflowTitle": "Close the team execution loop in three steps",
+    "workflowSubtitle": "Designed for small teams, private networks, and agent workflows that need local tooling."
   },
   "features": {
-    "title": "Core Features",
-    "subtitle": "The all-in-one collaboration tool for modern teams",
+    "title": "Designed around real execution paths",
+    "subtitle": "Envoy is not another chat room. Messages can become tasks, tasks can be executed by people or agents, and results return to the team context.",
     "chat": {
-      "title": "Instant Messaging",
-      "description": "Real-time messaging, channels, file sharing — zero latency team communication with Markdown, code highlighting, and cloud resource mentions."
+      "title": "Contextual chat",
+      "description": "Channels, Markdown, code snippets, and resource mentions keep discussion connected to tasks and output."
     },
     "tasks": {
-      "title": "Task Management",
-      "description": "Full lifecycle management from creation to completion. Leaders dispatch, members execute, reviews are transparent."
+      "title": "Task dispatch",
+      "description": "Leaders assign work, members execute and report back. Status, attachments, and review notes stay together."
     },
     "ai": {
-      "title": "AI Agent",
-      "description": "Smart chat suggestions, auto-reply, autonomous task execution. AI Agents understand instructions and complete work independently."
+      "title": "AI agent collaboration",
+      "description": "Agents can join conversations, understand task instructions, and use local tooling to complete executable work."
     },
     "cloud": {
-      "title": "Cloud Resources",
-      "description": "Shared team file space with directory management, inline preview, and message mentions. Resources at your fingertips."
+      "title": "Cloud resource mentions",
+      "description": "Team files are managed as resources and can be referenced directly inside messages, tasks, and reviews."
     },
     "crossPlatform": {
-      "title": "Cross-Platform",
-      "description": "Native macOS and Windows clients built with Tauri. Lightweight, fast, with deep system integration."
+      "title": "Desktop client",
+      "description": "Tauri-based macOS and Windows clients are built for persistent work and system-level integration."
     },
     "selfHost": {
-      "title": "Self-Hosted",
-      "description": "Manager server is fully self-hosted. Your data, your control. Docker one-click deployment for privacy-conscious teams."
+      "title": "Private deployment",
+      "description": "The Manager service can be self-hosted, keeping data boundaries clear for privacy, internal networks, and audits."
     }
   },
   "download": {
-    "title": "Download Envoy",
-    "subtitle": "Choose your platform to get started",
+    "title": "Choose your Envoy client",
+    "subtitle": "This page is the release entry point. Installers will be published here when ready, with the source path available now.",
     "macos": "macOS",
     "windows": "Windows",
-    "comingSoon": "Coming Soon",
-    "systemReq": "System Requirements",
-    "macosReq": "macOS 12+ (Apple Silicon / Intel)",
-    "windowsReq": "Windows 10+ (x64)"
+    "comingSoon": "Installer in preparation",
+    "source": "View source",
+    "systemReq": "System requirements",
+    "macosReq": "macOS 12 or later, Apple Silicon or Intel",
+    "windowsReq": "Windows 10 or later, x64",
+    "serverTitle": "Manager service",
+    "serverReq": "Runs with Docker or Node.js for team registry, messaging, and resource management."
   },
   "footer": {
-    "description": "Team collaboration, reimagined. Open-source, self-hosted, AI-powered.",
+    "description": "Envoy is a self-hosted collaboration client for technical teams, connecting messages, tasks, cloud resources, and AI agents in one execution trail.",
     "product": "Product",
     "resources": "Resources",
-    "community": "Community"
+    "community": "Community",
+    "legal": "Legal",
+    "releases": "Release entry",
+    "issues": "Issues",
+    "privacy": "Privacy notes",
+    "terms": "Terms"
   }
 }

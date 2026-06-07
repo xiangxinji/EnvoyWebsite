@@ -1,0 +1,294 @@
+---
+import MacWindow from './MacWindow.astro';
+import ProductWorkspace from './ProductWorkspace.astro';
+import GlassCard from './GlassCard.astro';
+import { useTranslations, path } from '../i18n/utils';
+
+interface Props {
+  locale: 'zh' | 'en';
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+const docsPath = path(locale === 'en' ? '/en/getting-started' : '/getting-started');
+const downloadPath = path(locale === 'en' ? '/en/download' : '/download');
+
+const facts = locale === 'en'
+  ? ['Self-hosted Manager', 'Tauri desktop client', 'Cloud resource mentions', 'Agent execution trail']
+  : ['自托管 Manager', 'Tauri 桌面客户端', '云资源引用', 'Agent 执行轨迹'];
+
+const workflow = locale === 'en'
+  ? [
+      ['01', 'Discuss', 'Chat keeps decisions, files, and code snippets in one channel.'],
+      ['02', 'Dispatch', 'Turn the brief into a task with owner, resources, and review state.'],
+      ['03', 'Execute', 'Members or agents report progress back into the same workspace.'],
+    ]
+  : [
+      ['01', '讨论', '频道里保留决策、文件和代码片段。'],
+      ['02', '派发', '把上下文转成任务，绑定负责人、资源和评审状态。'],
+      ['03', '执行', '成员或 Agent 将进度回传到同一工作台。'],
+    ];
+
+const features = [
+  ['01', t('features.chat.title'), t('features.chat.description'), 'message'],
+  ['02', t('features.tasks.title'), t('features.tasks.description'), 'task'],
+  ['03', t('features.ai.title'), t('features.ai.description'), 'agent'],
+  ['04', t('features.cloud.title'), t('features.cloud.description'), 'file'],
+];
+---
+
+<section class="hero container">
+  <div class="hero-copy">
+    <span class="eyebrow">{t('hero.eyebrow')}</span>
+    <h1>{t('hero.title')}</h1>
+    <p class="hero-subtitle">{t('hero.subtitle')}</p>
+    <p>{t('hero.description')}</p>
+    <div class="hero-actions">
+      <a href={downloadPath} class="btn btn-primary">{t('hero.download')}</a>
+      <a href={docsPath} class="btn btn-secondary">{t('hero.viewDocs')}</a>
+    </div>
+  </div>
+
+  <div class="hero-product">
+    <MacWindow title="envoy://team/agent-ops">
+      <ProductWorkspace locale={locale} />
+    </MacWindow>
+  </div>
+</section>
+
+<section class="facts container" aria-label="Product facts">
+  {facts.map((fact) => <span>{fact}</span>)}
+</section>
+
+<section class="operations container">
+  <div class="section-heading">
+    <h2>{t('home.operationsTitle')}</h2>
+    <p>{t('home.operationsSubtitle')}</p>
+  </div>
+  <div class="feature-grid">
+    {features.map(([icon, title, description, meta], index) => (
+      <GlassCard icon={icon} title={title} description={description} meta={meta} class:list={{ wide: index === 0 }} />
+    ))}
+  </div>
+</section>
+
+<section class="workflow container">
+  <div class="workflow-intro">
+    <span class="eyebrow">{locale === 'en' ? 'Workflow' : '工作流'}</span>
+    <h2>{t('home.workflowTitle')}</h2>
+    <p>{t('home.workflowSubtitle')}</p>
+  </div>
+  <div class="workflow-steps">
+    {workflow.map(([num, title, body]) => (
+      <article>
+        <span>{num}</span>
+        <h3>{title}</h3>
+        <p>{body}</p>
+      </article>
+    ))}
+  </div>
+</section>
+
+<style>
+  .hero {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(34rem, 1.1fr);
+    gap: clamp(2rem, 5vw, 4.5rem);
+    align-items: center;
+    min-height: 100dvh;
+    padding: 7rem 0 4rem;
+  }
+
+  .hero-copy h1 {
+    max-width: 13ch;
+    margin-top: 1rem;
+    color: var(--text-primary);
+    font-size: clamp(3rem, 6vw, 4.7rem);
+    font-weight: 850;
+    letter-spacing: 0;
+    line-height: 0.98;
+    text-wrap: balance;
+  }
+
+  .hero-subtitle {
+    margin-top: 1.4rem;
+    color: var(--text-primary);
+    font-size: clamp(1.15rem, 2.4vw, 1.45rem);
+    font-weight: 750;
+    line-height: 1.35;
+    text-wrap: balance;
+  }
+
+  .hero-copy p:not(.hero-subtitle) {
+    max-width: 39rem;
+    margin-top: 1rem;
+    color: var(--text-secondary);
+    font-size: 1.02rem;
+    line-height: 1.75;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-top: 2rem;
+  }
+
+  .hero-product {
+    min-width: 0;
+    animation: rise 0.7s ease both;
+  }
+
+  .hero-copy p {
+    overflow-wrap: anywhere;
+  }
+
+  .facts {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--border);
+  }
+
+  .facts span {
+    min-height: 4.2rem;
+    display: grid;
+    place-items: center;
+    background: rgba(255, 255, 255, 0.035);
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-weight: 750;
+    text-align: center;
+    padding: 0.8rem;
+  }
+
+  .operations {
+    padding: var(--space-4xl) 0;
+  }
+
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  .feature-grid :global(.feature-card:first-child) {
+    grid-column: span 2;
+  }
+
+  .workflow {
+    display: grid;
+    grid-template-columns: 0.8fr 1.2fr;
+    gap: 2rem;
+    padding-bottom: var(--space-4xl);
+  }
+
+  .workflow-intro h2 {
+    margin-top: 0.8rem;
+    color: var(--text-primary);
+    font-size: clamp(2rem, 4vw, 3.4rem);
+    font-weight: 850;
+    line-height: 1;
+    text-wrap: balance;
+  }
+
+  .workflow-intro p {
+    margin-top: 1rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+
+  .workflow-steps {
+    display: grid;
+    gap: 0.85rem;
+  }
+
+  .workflow-steps article {
+    display: grid;
+    grid-template-columns: 4rem 1fr;
+    gap: 1rem;
+    align-items: start;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: rgba(255, 255, 255, 0.035);
+    padding: 1.1rem;
+  }
+
+  .workflow-steps span {
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-weight: 850;
+  }
+
+  .workflow-steps h3 {
+    color: var(--text-primary);
+    font-size: 1.2rem;
+  }
+
+  .workflow-steps p {
+    margin-top: 0.35rem;
+    color: var(--text-secondary);
+    line-height: 1.65;
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (max-width: 980px) {
+    .hero {
+      grid-template-columns: 1fr;
+      min-height: auto;
+    }
+
+    .hero-copy h1 {
+      max-width: 13ch;
+    }
+
+    .facts {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .feature-grid,
+    .workflow {
+      grid-template-columns: 1fr;
+    }
+
+    .feature-grid :global(.feature-card:first-child) {
+      grid-column: auto;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .hero {
+      padding-top: 6rem;
+    }
+
+    .hero-copy h1 {
+      font-size: clamp(2.4rem, 12vw, 3.05rem);
+    }
+
+    .hero-copy p:not(.hero-subtitle) {
+      max-width: 31ch;
+    }
+
+    .facts {
+      grid-template-columns: 1fr;
+    }
+
+    .workflow-steps article {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
